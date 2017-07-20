@@ -1,0 +1,16 @@
+[
+{
+  "modid": "wpclient",
+  "name": "World Police Client",
+  "description": "Spooky mod including locator, alt lookup and some other goodies",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Maxopoly"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
