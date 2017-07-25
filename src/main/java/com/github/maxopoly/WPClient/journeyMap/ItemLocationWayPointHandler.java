@@ -65,6 +65,7 @@ public class ItemLocationWayPointHandler {
 		for (ModWaypoint point : points) {
 			jmAPI.remove(point);
 		}
+		points.clear();
 	}
 
 	private void createWaypoint(Location loc, String name, int amount) {
