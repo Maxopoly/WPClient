@@ -2,6 +2,7 @@ package com.github.maxopoly.WPClient;
 
 import com.github.maxopoly.WPClient.connection.ServerConnection;
 import com.github.maxopoly.WPClient.packetCreation.ItemLocationRequestPacket;
+import com.github.maxopoly.WPClient.model.WPItem;
 import mezz.jei.input.WPClientGUIClickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
@@ -15,7 +16,8 @@ public class JEI_GUI_Listener {
 		if (!WPClientForgeMod.getInstance().isConnectionReady()) {
 			return;
 		}
-		ItemLocationRequestPacket packet = new ItemLocationRequestPacket(e.getItemID());
+		WPItem item = new WPItem(e.getItemID());
+		ItemLocationRequestPacket packet = new ItemLocationRequestPacket(item.getID());
 		ServerConnection conn = WPClientForgeMod.getInstance().getServerConnection();
 		if (conn.isInitialized()) {
 			conn.sendMessage(packet.getMessage());

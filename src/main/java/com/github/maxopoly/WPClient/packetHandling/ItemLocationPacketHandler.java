@@ -1,6 +1,7 @@
 package com.github.maxopoly.WPClient.packetHandling;
 
 import com.github.maxopoly.WPClient.journeyMap.ItemLocationWayPointHandler;
+import com.github.maxopoly.WPClient.model.WPItem;
 import com.github.maxopoly.WPCommon.model.Location;
 import com.github.maxopoly.WPCommon.packetHandling.AbstractPacketHandler;
 import java.util.HashMap;
@@ -19,13 +20,14 @@ public class ItemLocationPacketHandler extends AbstractPacketHandler {
 		JSONArray array = json.getJSONArray("chests");
 		Map<Location, Integer> locs = new HashMap<Location, Integer>();
 		int id = json.getInt("id");
+		WPItem item = new WPItem(id);
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject innerJson = array.getJSONObject(i);
 			Location loc = new Location(innerJson.getJSONObject("loc"));
 			int amount = innerJson.getInt("amount");
 			locs.put(loc, amount);
 		}
-		ItemLocationWayPointHandler.getInstance().markLocations(id, locs);
+		ItemLocationWayPointHandler.getInstance().markLocations(item, locs);
 	}
 
 }

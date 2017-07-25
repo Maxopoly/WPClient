@@ -2,6 +2,7 @@ package com.github.maxopoly.WPClient.journeyMap;
 
 import com.github.maxopoly.WPClient.WPClientForgeMod;
 import com.github.maxopoly.WPCommon.model.Location;
+import com.github.maxopoly.WPClient.model.WPItem;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -40,24 +41,20 @@ public class ItemLocationWayPointHandler {
 		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16).setAnchorY(16);
 	}
 
-	public synchronized void markLocations(int id, Map<Location, Integer> amount) {
+	public synchronized void markLocations(WPItem item, Map<Location, Integer> amount) {
 		hideAll();
-		Item item = Item.getItemById(id);
-		String name = item.getItemStackDisplayName(new ItemStack(item));
-		String[] splitName = name.split("\\.");
-		name = splitName[splitName.length - 1];
 		if (amount.isEmpty() && mc.thePlayer != null) {
-			mc.thePlayer.addChatMessage(new TextComponentString("[WPC] Server doesnt know of a chest containing " + name));
+			mc.thePlayer.addChatMessage(new TextComponentString("[WPC] Server doesnt know of a chest containing " + item.getPrettyName()));
 			return;
 		}
 		int sum = 0;
 		for (Entry<Location, Integer> entry : amount.entrySet()) {
-			createWaypoint(entry.getKey(), name, entry.getValue());
+			createWaypoint(entry.getKey(), item.getPrettyName(), entry.getValue());
 			sum += entry.getValue();
 		}
 		if (mc.thePlayer != null) {
 			mc.thePlayer.addChatMessage(new TextComponentString("[WPC] Loaded " + amount.size()
-					+ " locations for a total of " + sum + " " + name));
+					+ " locations for a total of " + sum + " " + item.getPrettyName()));
 		}
 	}
 
