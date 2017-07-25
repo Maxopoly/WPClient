@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import org.apache.logging.log4j.Logger;
 
 public class ItemLocationWayPointHandler {
@@ -45,7 +46,9 @@ public class ItemLocationWayPointHandler {
 		hideAll();
 		if (amount.isEmpty() && mc.thePlayer != null) {
 			mc.thePlayer.addChatMessage(new TextComponentString(
-					String.format("[WPC]  Couldn't find any %s.", item.getPrettyName())));
+					String.format("%s[WPC]  %sCouldn't find any %s%s%s.",
+						TextFormatting.BLUE, TextFormatting.DARK_RED, TextFormatting.WHITE, item.getPrettyName(),
+						TextFormatting.DARK_RED)));
 			return;
 		}
 		int sum = 0;
@@ -59,8 +62,10 @@ public class ItemLocationWayPointHandler {
 				s = "";
 			}
 			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-					"[WPC]  Found %s of %s in %d location%s.",
-					item.prettifyItemCount(sum), item.getPrettyName(), amount.size(), s)));
+					"%s[WPC]  %sFound %s%s %sof %s%s %sin %d location%s.",
+					TextFormatting.BLUE, TextFormatting.GRAY, TextFormatting.WHITE, item.prettifyItemCount(sum),
+					TextFormatting.GRAY, TextFormatting.WHITE, item.getPrettyName(), TextFormatting.GRAY,
+					amount.size(), s)));
 		}
 	}
 
