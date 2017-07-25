@@ -11,6 +11,7 @@ import journeymap.client.api.display.ModWaypoint;
 import journeymap.client.api.model.MapImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.logging.log4j.Logger;
@@ -42,7 +43,7 @@ public class ItemLocationWayPointHandler {
 	public synchronized void markLocations(int id, Map<Location, Integer> amount) {
 		hideAll();
 		Item item = Item.getItemById(id);
-		String name = item.getUnlocalizedName();
+		String name = item.getItemStackDisplayName(new ItemStack(item));
 		String[] splitName = name.split("\\.");
 		name = splitName[splitName.length - 1];
 		if (amount.isEmpty() && mc.thePlayer != null) {
