@@ -2,9 +2,9 @@ package com.github.maxopoly.WPClient.packetCreation;
 
 import com.github.maxopoly.WPCommon.packetHandling.AbstractJsonPacket;
 
-public class RequestPlayerInfo extends AbstractJsonPacket {
+public class RequestPlayerInfoPacket extends AbstractJsonPacket {
 
-	public RequestPlayerInfo(String player) {
+	public RequestPlayerInfoPacket(String player) {
 		super("requestPlayerInfo");
 		msg.put("name", player);
 	}

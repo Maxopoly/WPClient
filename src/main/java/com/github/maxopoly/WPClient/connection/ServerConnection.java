@@ -3,6 +3,7 @@ package com.github.maxopoly.WPClient.connection;
 import com.github.maxopoly.WPClient.WPClientForgeMod;
 import com.github.maxopoly.WPCommon.packetHandling.PacketForwarder;
 import com.github.maxopoly.WPCommon.util.AES_CFB8_Encrypter;
+import com.github.maxopoly.WPCommon.util.CompressionManager;
 import com.github.maxopoly.WPCommon.util.ConnectionUtils;
 import com.github.maxopoly.WPCommon.util.PKCSEncrypter;
 import com.github.maxopoly.WPCommon.util.VarInt;
@@ -31,9 +32,12 @@ public class ServerConnection {
 	private static final String serverAdress = "168.235.102.74";
 	private final static String sessionServerAdress = "https://sessionserver.mojang.com/session/minecraft/join";
 
+	private static final String tag = "awoo";
+
 	private Logger logger;
 	private PacketForwarder packetHandler;
 	private boolean closed;
+	private boolean initialized;
 
 	private Socket socket;
 	private DataInputStream input;
@@ -46,6 +50,7 @@ public class ServerConnection {
 	public ServerConnection(Minecraft mc, Logger logger) {
 		this.logger = logger;
 		this.mc = mc;
+		this.initialized = false;
 		this.packetHandler = new ClientSidePacketForwarder(logger);
 	}
 
@@ -64,7 +69,13 @@ public class ServerConnection {
 		handleAvailablePackets();
 	}
 
+	public boolean isInitialized() {
+		return initialized;
+	}
+
 	public void handleAvailablePackets() {
+		logger.info("Setting up packet listener for WPC");
+		this.initialized = true;
 		while (!closed) {
 			try {
 				while (input.available() > 0) {
@@ -72,7 +83,8 @@ public class ServerConnection {
 					byte[] dataArray = new byte[packetLength];
 					input.readFully(dataArray);
 					byte[] decrypted = encrypter.decrypt(dataArray);
-					String dataString = new String(decrypted, StandardCharsets.UTF_8);
+					byte[] decompressed = CompressionManager.decompress(decrypted, logger);
+					String dataString = new String(decompressed, StandardCharsets.UTF_8);
 					JSONObject json;
 					try {
 						json = new JSONObject(dataString);
@@ -90,22 +102,30 @@ public class ServerConnection {
 			}
 
 		}
+		logger.warn("Stopped packet handling, connection is gone?");
 	}
 
-	public void sendMessage(JSONObject json) {
+	public void sendMessage(final JSONObject json) {
 		if (closed) {
 			logger.info("Tried to send json, but connection was already closed");
 			return;
 		}
-		try {
-			byte[] rawData = json.toString().getBytes(StandardCharsets.UTF_8);
-			VarInt.writeVarInt(output, rawData.length, encrypter);
-			byte[] encrypted = encrypter.encrypt(rawData);
-			output.write(encrypted);
-		} catch (IOException e) {
-			logger.error("Error while sending packet", e);
-			close();
-		}
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					byte[] rawData = json.toString().getBytes(StandardCharsets.UTF_8);
+					byte[] compressed = CompressionManager.compress(rawData);
+					VarInt.writeVarInt(output, compressed.length, encrypter);
+					byte[] encrypted = encrypter.encrypt(compressed);
+					output.write(encrypted);
+				} catch (IOException e) {
+					logger.error("Error while sending packet", e);
+					close();
+				}
+			}
+		}).start();
 	}
 
 	private void reestablishConnection() throws IOException {
@@ -135,6 +155,7 @@ public class ServerConnection {
 		JSONObject playerInfoJson = new JSONObject();
 		playerInfoJson.put("name", session.getUsername());
 		playerInfoJson.put("uuid", uuidWithoutDash);
+		playerInfoJson.put("tag", tag);
 		sendMessage(playerInfoJson);
 	}
 
@@ -168,6 +189,10 @@ public class ServerConnection {
 			logger.error("Failed to send encryption reply", e);
 			close();
 		}
+	}
+
+	public boolean isClosed() {
+		return closed;
 	}
 
 	private void authAgainstSessionServer(String accessToken, String playerID, String sha, Logger logger)

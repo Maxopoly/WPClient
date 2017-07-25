@@ -1,0 +1,82 @@
+WPClient Manual
+
+---
+Table of content:
+
+1. Licensing
+2. General
+3. Installation
+4. Usage
+
+---
+
+1. Licensing:
+
+Copyright (c) 2017 Maxopoly
+
+By using this software you agree to the following:
+
+You will not share the WPClient binaries provided to you here with any third party. 
+Third party refers to anyone, who is not you or the person who provided the software to you (usually Maxopoly).
+
+You will not attempt to decompile, reverse engineer or modify WPClient.
+
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+2. General:
+
+To get access to the WPClients source code, contact Maxopoly.
+
+You can do so by sending a reddit PM to /u/Maxopoly or a discord PM to Maxopoly#3569
+
+Be aware that any client side mod can steal your minecraft login cookie and give access to your account to a third party.
+This is especially important here, as maliciously modified versions of this software would have a very easy time stealing
+your login cookie, without there being a noticeable difference in the provided jar. Due to that I'd recommend using only
+jars directly provided to you by Maxopoly.
+
+---
+
+3. Installation
+
+This mod is currently using Minecraft version 1.10.2. Assume everything from here on is supposed to be compiled against 1.10.2
+
+You will need a minecraft installation with Minecraft Forge. You can get Forge here: https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.10.2.html
+
+The WPClient itself is a ForgeMod, which requires JourneyMap and JEI (JustEnoughItems) to work.
+
+You can get JourneyMap here: https://mods.curse.com/mc-mods/minecraft/journeymap/2435300
+A version of it should have also been provided to you along with the WPClient jar
+
+JustEnoughItems needs to use a special custom version, which should have been provided to you as well. Using any other version of it than that one will not work.
+
+All three of those .jar files need to be put into your mods/1.10.2 folder in your minecraft installation after installing Forge.
+
+Simply start up Minecraft with your Forge profile after adding the jars, if you get through to Minecraft's main menu, everything worked. If not, complain to Maxopoly.
+
+---
+
+4. Usage
+
+4.1 Chest stock keeper:
+Every time you close a chest with this mod, it's content and location will be sent to the server. Consider this when dealing with chests that you dont want others to find.
+To lookup an item's location you can open up your inventory and left click an item in JEI's GUI. You can show/hide this GUI by pressing CTRL+O, which can also be rebound under 'Controls'.
+Waypoints indicating the desired items location will automatically be created.
+
+4.2 Locator:
+Waypoints will be automatically created at the location of any known player. A player is known if he is using this mod, is in radar range of someone using this mod or has hit a snitch,
+for which someone using this client got a notification. Due to that you can turn player rendering off in JM, it's replace with waypoints. A recommended set of JM setting should have also been 
+provided to you along with the binaries. Simply merge the journeymap folder into your minecraft folder to import the recommended settings.
+
+
+
+
+

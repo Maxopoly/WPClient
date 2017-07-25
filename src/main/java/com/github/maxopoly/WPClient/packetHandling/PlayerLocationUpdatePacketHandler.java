@@ -17,6 +17,12 @@ public class PlayerLocationUpdatePacketHandler extends AbstractPacketHandler {
 		super("playerLocations");
 	}
 
+	public static void stagePlayerForUpdate(String name) {
+		synchronized (updatedPlayers) {
+			updatedPlayers.add(name);
+		}
+	}
+
 	public static List<String> popLocationsToUpdate() {
 		synchronized (updatedPlayers) {
 			List<String> copy = new LinkedList(updatedPlayers);

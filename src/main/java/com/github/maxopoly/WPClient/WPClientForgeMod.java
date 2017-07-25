@@ -1,7 +1,7 @@
 package com.github.maxopoly.WPClient;
 
 import com.github.maxopoly.WPClient.connection.ServerConnection;
-import com.github.maxopoly.WPClient.packetCreation.RenderDistancePlayersPacket;
+import com.github.maxopoly.WPClient.packetCreation.RenderDistancePlayerPacket;
 import com.github.maxopoly.WPCommon.model.Location;
 import com.github.maxopoly.WPCommon.model.LocationTracker;
 import java.util.HashMap;
@@ -22,6 +22,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = WPClientForgeMod.MODID, version = WPClientForgeMod.VERSION)
@@ -29,11 +30,14 @@ public class WPClientForgeMod {
 	public static final String MODID = "wpclient";
 	public static final String VERSION = "1.0";
 
+	private final static String serverIP = "mc.civclassic.com";
+
 	private static WPClientForgeMod instance;
 
 	private Minecraft mc;
 	private ServerConnection connection;
 	private Logger logger;
+	private boolean enabled;
 
 	public static WPClientForgeMod getInstance() {
 		return instance;
@@ -47,8 +51,11 @@ public class WPClientForgeMod {
 	public void init(FMLInitializationEvent event) {
 		instance = this;
 		mc = Minecraft.getMinecraft();
-		MinecraftForge.EVENT_BUS.register(this);
 		logger = FMLLog.getLogger();
+		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(new SnitchHitHandler(logger));
+		MinecraftForge.EVENT_BUS.register(new JEI_GUI_Listener());
+		MinecraftForge.EVENT_BUS.register(new ChestContentListener());
 		connection = new ServerConnection(mc, logger);
 		new Thread(new Runnable() {
 
@@ -64,12 +71,27 @@ public class WPClientForgeMod {
 			public void run() {
 				sendPlayerLocations();
 			}
-		}, 1, 1, TimeUnit.SECONDS);
+		}, 5, 1, TimeUnit.SECONDS);
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onConnect(ClientConnectedToServerEvent e) {
+		String ip = mc.getCurrentServerData().serverIP;
+		if (ip.endsWith(serverIP)) {
+			enabled = true;
+			logger.info("Enabling WPClient, connecting to " + ip);
+		} else {
+			enabled = false;
+			logger.info("Disabling WPClient, wrong IP " + ip);
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onTick(ClientTickEvent event) {
 		// update locations of all players in render distance
+		if (!isConnectionReady()) {
+			return;
+		}
 		if (mc.theWorld == null) {
 			return;
 		}
@@ -96,7 +118,18 @@ public class WPClientForgeMod {
 		connection.start();
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public boolean isConnectionReady() {
+		return isEnabled() && connection != null && connection.isInitialized() && !connection.isClosed();
+	}
+
 	private void sendPlayerLocations() {
+		if (!isEnabled() || !connection.isInitialized()) {
+			return;
+		}
 		LocationTracker tracker = LocationTracker.getInstance();
 		List<String> pendingUpdates = tracker.pullAndClearRecentlyUpdatedPlayers();
 		if (pendingUpdates.isEmpty()) {
@@ -106,7 +139,7 @@ public class WPClientForgeMod {
 		for (String player : pendingUpdates) {
 			players.put(player, tracker.getLastKnownLocation(player));
 		}
-		RenderDistancePlayersPacket updatePacket = new RenderDistancePlayersPacket(players);
+		RenderDistancePlayerPacket updatePacket = new RenderDistancePlayerPacket(players);
 		connection.sendMessage(updatePacket.getMessage());
 	}
 

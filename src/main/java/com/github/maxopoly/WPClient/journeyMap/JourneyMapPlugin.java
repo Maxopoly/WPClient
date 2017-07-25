@@ -17,6 +17,8 @@ public class JourneyMapPlugin implements IClientPlugin {
 		this.jmAPI = jmClientApi;
 		PlayerLocationWaypointHandler handler = new PlayerLocationWaypointHandler(jmAPI, FMLLog.getLogger(),
 				Minecraft.getMinecraft());
+		ItemLocationWayPointHandler itemHandler = new ItemLocationWayPointHandler(jmAPI, FMLLog.getLogger(),
+				Minecraft.getMinecraft());
 		MinecraftForge.EVENT_BUS.register(handler);
 	}
 
