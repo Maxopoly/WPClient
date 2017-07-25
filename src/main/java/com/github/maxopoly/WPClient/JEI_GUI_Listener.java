@@ -22,10 +22,10 @@ public class JEI_GUI_Listener {
 		if (conn.isInitialized()) {
 			conn.sendMessage(packet.getMessage());
 			Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(String.format(
-					"[WPC] Requesting locations of %s from the server ...", item.getPrettyName())));
+					"[WPC]  Requesting locations of %s from the server ...", item.getPrettyName())));
 		} else {
 			Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(
-					"[WPC] Error: Not connected to the server, could not request item location."));
+					"[WPC]  Error: Not connected to the server, could not request item location."));
 		}
 	}
 }

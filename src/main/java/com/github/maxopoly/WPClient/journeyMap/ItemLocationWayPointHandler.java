@@ -45,7 +45,7 @@ public class ItemLocationWayPointHandler {
 		hideAll();
 		if (amount.isEmpty() && mc.thePlayer != null) {
 			mc.thePlayer.addChatMessage(new TextComponentString(
-					String.format("[WPC] Couldn't find any %s.", item.getPrettyName())));
+					String.format("[WPC]  Couldn't find any %s.", item.getPrettyName())));
 			return;
 		}
 		int sum = 0;
@@ -59,7 +59,7 @@ public class ItemLocationWayPointHandler {
 				s = "";
 			}
 			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-					"[WPC] Found %s of %s in %d location%s.",
+					"[WPC]  Found %s of %s in %d location%s.",
 					item.prettifyItemCount(sum), item.getPrettyName(), amount.size(), s)));
 		}
 	}
