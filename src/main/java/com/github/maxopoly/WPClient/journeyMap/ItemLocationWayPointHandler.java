@@ -44,17 +44,23 @@ public class ItemLocationWayPointHandler {
 	public synchronized void markLocations(WPItem item, Map<Location, Integer> amount) {
 		hideAll();
 		if (amount.isEmpty() && mc.thePlayer != null) {
-			mc.thePlayer.addChatMessage(new TextComponentString("[WPC] Server doesnt know of a chest containing " + item.getPrettyName()));
+			mc.thePlayer.addChatMessage(new TextComponentString(
+					String.format("[WPC] Couldn't find any %s.", item.getPrettyName())));
 			return;
 		}
 		int sum = 0;
 		for (Entry<Location, Integer> entry : amount.entrySet()) {
-			createWaypoint(entry.getKey(), item.getPrettyName(), entry.getValue());
+			createWaypoint(entry.getKey(), item.getPrettyName(), item.prettifyItemCount(entry.getValue()));
 			sum += entry.getValue();
 		}
 		if (mc.thePlayer != null) {
-			mc.thePlayer.addChatMessage(new TextComponentString("[WPC] Loaded " + amount.size()
-					+ " locations for a total of " + sum + " " + item.getPrettyName()));
+			String s = "s";
+			if (amount.size() == 1) {
+				s = "";
+			}
+			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
+					"[WPC] Found %s of %s in %d location%s.",
+					item.prettifyItemCount(sum), item.getPrettyName(), amount.size(), s)));
 		}
 	}
 
@@ -65,9 +71,10 @@ public class ItemLocationWayPointHandler {
 		points.clear();
 	}
 
-	private void createWaypoint(Location loc, String name, int amount) {
-		ModWaypoint point = new ModWaypoint(WPClientForgeMod.MODID, loc.toString() + ";;WPC", "itemLocations", amount + " "
-				+ name, (int) loc.getX(), (int) loc.getY(), (int) loc.getZ(), icon, 0x99ccff, false, 0);
+	private void createWaypoint(Location loc, String name, String prettyAmount) {
+		ModWaypoint point = new ModWaypoint(WPClientForgeMod.MODID, loc.toString() + ";;WPC", "itemLocations",
+				prettyAmount + " " + name, (int) loc.getX(), (int) loc.getY(), (int) loc.getZ(), icon, 0x99ccff,
+				false, 0);
 		points.add(point);
 		try {
 			jmAPI.show(point);
