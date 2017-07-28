@@ -208,6 +208,11 @@ public class ServerConnection {
 
 	private void close() {
 		closed = true;
+		try {
+			socket.close();
+		} catch (IOException e) {
+			// its fine
+		}
 		WPClientForgeMod.getInstance().reconnect();
 	}
 

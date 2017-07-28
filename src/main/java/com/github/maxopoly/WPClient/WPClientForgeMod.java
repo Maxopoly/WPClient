@@ -114,8 +114,15 @@ public class WPClientForgeMod {
 		} catch (InterruptedException e) {
 
 		}
-		connection = new ServerConnection(mc, logger);
-		connection.start();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				connection = new ServerConnection(mc, logger);
+				connection.start();
+			}
+		}).start();
+		;
 	}
 
 	public boolean isEnabled() {
