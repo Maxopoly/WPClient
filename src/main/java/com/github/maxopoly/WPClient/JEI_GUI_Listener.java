@@ -22,10 +22,6 @@ public class JEI_GUI_Listener {
 		ServerConnection conn = WPClientForgeMod.getInstance().getServerConnection();
 		if (conn.isInitialized()) {
 			conn.sendMessage(packet.getMessage());
-			Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(String.format(
-					"%s[WPC]  %sRequesting locations of %s%s %sfrom the server ...",
-					TextFormatting.BLUE, TextFormatting.GRAY, TextFormatting.WHITE, item.getPrettyName(),
-					TextFormatting.GRAY)));
 		} else {
 			Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(String.format(
 					"%s[WPC]  %sError: %sNot connected to the server, could not request item location.",
