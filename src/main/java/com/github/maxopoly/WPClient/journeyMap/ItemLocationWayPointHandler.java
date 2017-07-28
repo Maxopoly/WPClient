@@ -53,7 +53,7 @@ public class ItemLocationWayPointHandler {
 		}
 		int sum = 0;
 		for (Entry<Location, Integer> entry : amount.entrySet()) {
-			createWaypoint(entry.getKey(), item.getPrettyName(), item.prettifyItemCount(entry.getValue()));
+			createWaypoint(entry.getKey(), item.getPrettyName(), item.prettifyItemCountShort(entry.getValue()));
 			sum += entry.getValue();
 		}
 		if (mc.thePlayer != null) {

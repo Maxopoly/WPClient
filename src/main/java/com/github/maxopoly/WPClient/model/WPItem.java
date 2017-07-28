@@ -33,6 +33,18 @@ public class WPItem {
 		return String.format("%d x 64 + %d [%,d]", stacks, leftover, count);
 	}
 
+	public String prettifyItemCountShort(int count) {
+		int stacks = count / 64;
+		if (stacks == 0) {
+			return String.format("%d", count);
+		}
+		int leftover = count % 64;
+		if (leftover == 0) {
+			return String.format("%d x 64", stacks);
+		}
+		return String.format("~%d x 64", stacks);
+	}
+
 	private String genPrettyName() {
 		Item item = Item.getItemById(this.id);
 		String name = item.getItemStackDisplayName(new ItemStack(item));
