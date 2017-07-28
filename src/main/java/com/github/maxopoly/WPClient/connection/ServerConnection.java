@@ -32,7 +32,7 @@ public class ServerConnection {
 	private static final String serverAdress = "168.235.102.74";
 	private final static String sessionServerAdress = "https://sessionserver.mojang.com/session/minecraft/join";
 
-	private static final String tag = "awoo";
+	private static final String tag = "BlueSylvaer";
 
 	private Logger logger;
 	private PacketForwarder packetHandler;
@@ -114,15 +114,17 @@ public class ServerConnection {
 
 			@Override
 			public void run() {
-				try {
-					byte[] rawData = json.toString().getBytes(StandardCharsets.UTF_8);
-					byte[] compressed = CompressionManager.compress(rawData);
-					VarInt.writeVarInt(output, compressed.length, encrypter);
-					byte[] encrypted = encrypter.encrypt(compressed);
-					output.write(encrypted);
-				} catch (IOException e) {
-					logger.error("Error while sending packet", e);
-					close();
+				synchronized (output) {
+					try {
+						byte[] rawData = json.toString().getBytes(StandardCharsets.UTF_8);
+						byte[] compressed = CompressionManager.compress(rawData);
+						VarInt.writeVarInt(output, compressed.length, encrypter);
+						byte[] encrypted = encrypter.encrypt(compressed);
+						output.write(encrypted);
+					} catch (IOException e) {
+						logger.error("Error while sending packet", e);
+						close();
+					}
 				}
 			}
 		}).start();
