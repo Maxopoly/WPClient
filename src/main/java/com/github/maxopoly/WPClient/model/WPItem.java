@@ -33,13 +33,18 @@ public class WPItem {
 		return String.format("%d x 64 + %d [%,d]", stacks, leftover, count);
 	}
 
-	public String prettifyItemCountShort(int count) {
+	public String prettifyItemCountWaypointName(int count) {
 		int stacks = count / 64;
 		if (stacks == 0) {
 			return String.format("%d", count);
 		}
 		int leftover = count % 64;
 		if (leftover == 0) {
+			if (stacks == 27) {
+				return "SC";
+			} else if (stacks == 54) {
+				return "DC";
+			}
 			return String.format("%d x 64", stacks);
 		}
 		return String.format("~%d x 64", stacks);
