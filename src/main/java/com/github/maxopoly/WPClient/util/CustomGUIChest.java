@@ -3,12 +3,12 @@ package com.github.maxopoly.WPClient.util;
 import com.github.maxopoly.WPClient.WPClientForgeMod;
 import com.github.maxopoly.WPClient.packetCreation.ChestContentPacket;
 import com.github.maxopoly.WPCommon.model.Location;
+import com.github.maxopoly.WPCommon.model.WPItem;
 import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.HashSet;
+import java.util.Set;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLLog;
 
@@ -31,7 +31,7 @@ public class CustomGUIChest extends GuiChest {
 		if (!WPClientForgeMod.getInstance().isConnectionReady()) {
 			return;
 		}
-		Map<Integer, Integer> content = new TreeMap<Integer, Integer>();
+		Set<WPItem> content = new HashSet<WPItem>();
 		IInventory inv = getLowerInv();
 		if (inv == null) {
 			return;
@@ -41,17 +41,21 @@ public class CustomGUIChest extends GuiChest {
 			if (is == null) {
 				continue;
 			}
-			int amount = is.stackSize;
-			if (amount <= 0) {
+			WPItem item = ItemUtils.convertItem(is);
+			if (item.getAmount() <= 0) {
 				continue;
 			}
-			int itemID = Item.getIdFromItem(is.getItem());
-			Integer previousCount = content.get(itemID);
-			if (previousCount == null) {
-				previousCount = 0;
+			boolean found = false;
+			for (WPItem existing : content) {
+				if (existing.equals(item)) {
+					existing.setAmount(existing.getAmount() + item.getAmount());
+					found = true;
+					break;
+				}
 			}
-			int newCount = previousCount + amount;
-			content.put(itemID, newCount);
+			if (!found) {
+				content.add(item);
+			}
 		}
 		WPClientForgeMod.getInstance().getServerConnection()
 				.sendMessage(new ChestContentPacket(location, content).getMessage());
