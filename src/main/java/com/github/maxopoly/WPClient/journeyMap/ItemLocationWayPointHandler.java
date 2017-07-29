@@ -8,6 +8,9 @@ import com.github.maxopoly.WPCommon.model.WPItem;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import journeymap.client.api.IClientAPI;
 import journeymap.client.api.display.ModWaypoint;
 import journeymap.client.api.model.MapImage;
@@ -23,6 +26,7 @@ public class ItemLocationWayPointHandler {
 
 	private Set<ModWaypoint> points;
 	private MapImage icon;
+	private ScheduledExecutorService cleanUpExec;
 
 	public static ItemLocationWayPointHandler getInstance() {
 		return instance;
@@ -65,6 +69,21 @@ public class ItemLocationWayPointHandler {
 					TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum), TextFormatting.GRAY,
 					TextFormatting.WHITE, prettyName, TextFormatting.GRAY, chests.size(), s)));
 		}
+		scheduleRemoval();
+	}
+
+	public void scheduleRemoval() {
+		if (cleanUpExec != null) {
+			cleanUpExec.shutdownNow();
+		}
+		cleanUpExec = Executors.newScheduledThreadPool(1);
+		cleanUpExec.schedule(new Runnable() {
+
+			@Override
+			public void run() {
+				hideAll();
+			}
+		}, 60, TimeUnit.SECONDS);
 	}
 
 	public synchronized void hideAll() {
