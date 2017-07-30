@@ -1,4 +1,6 @@
-package com.github.maxopoly.WPClient;
+package com.github.maxopoly.WPClient.listener;
+
+import com.github.maxopoly.WPClient.WPClientForgeMod;
 
 import com.github.maxopoly.WPClient.util.CustomGUIChest;
 import com.github.maxopoly.WPCommon.model.Location;
@@ -17,7 +19,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ChestContentListener {
 
+	private static final long clickTimeOut = 1000;
+
 	private Location lastClickedChest;
+	private long timeStamp;
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onChestOpen(GuiOpenEvent e) {
@@ -25,6 +30,9 @@ public class ChestContentListener {
 			return;
 		}
 		if (lastClickedChest == null) {
+			return;
+		}
+		if (System.currentTimeMillis() - timeStamp > clickTimeOut) {
 			return;
 		}
 		if (!(e.getGui() instanceof GuiChest)) {
@@ -44,6 +52,7 @@ public class ChestContentListener {
 		if (!isChest(itemID)) {
 			return;
 		}
+		timeStamp = System.currentTimeMillis();
 		lastClickedChest = adJustChestLocation(pos);
 	}
 

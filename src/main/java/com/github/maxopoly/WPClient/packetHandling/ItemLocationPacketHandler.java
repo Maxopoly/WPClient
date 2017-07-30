@@ -25,13 +25,14 @@ public class ItemLocationPacketHandler extends AbstractPacketHandler {
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject innerJson = array.getJSONObject(i);
 			Location loc = new Location(innerJson.getJSONObject("loc"));
-			JSONArray contentArray = innerJson.getJSONArray("content");
+			JSONArray contentArray = innerJson.getJSONArray("items");
 			Chest c = new Chest(loc);
 			for (int k = 0; k < contentArray.length(); k++) {
 				String contentItemString = contentArray.getString(k);
 				WPItem contentItem = new WPItem(contentItemString);
 				c.addItem(contentItem);
 			}
+			chests.add(c);
 		}
 		ItemLocationWayPointHandler.getInstance().markLocations(item, chests);
 	}

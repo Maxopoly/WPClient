@@ -32,7 +32,7 @@ public class ServerConnection {
 	private static final String serverAdress = "168.235.102.74";
 	private final static String sessionServerAdress = "https://sessionserver.mojang.com/session/minecraft/join";
 
-	private static final String tag = "tangent";
+	private static final String tag = "thoths";
 
 	private Logger logger;
 	private PacketForwarder packetHandler;

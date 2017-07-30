@@ -47,6 +47,7 @@ public class ItemLocationWayPointHandler {
 
 	public synchronized void markLocations(WPItem item, List<Chest> chests) {
 		hideAll();
+		scheduleRemoval();
 		String prettyName = ItemUtils.getPrettyName(item.getID());
 		if (chests.isEmpty() && mc.thePlayer != null) {
 			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
@@ -69,7 +70,6 @@ public class ItemLocationWayPointHandler {
 					TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum), TextFormatting.GRAY,
 					TextFormatting.WHITE, prettyName, TextFormatting.GRAY, chests.size(), s)));
 		}
-		scheduleRemoval();
 	}
 
 	public void scheduleRemoval() {
@@ -95,10 +95,26 @@ public class ItemLocationWayPointHandler {
 
 	private void createWaypoint(WPItem item, Chest chest, String name) {
 		Location loc = chest.getLocation();
-		// TODO include all items in chest
+		int stackSize = ItemUtils.getStackSizeById(item.getID());
+		int itemCount = 0;
+		int color = 0x66fff;
+		for (WPItem chestItem : chest.getContent()) {
+			if (chestItem.getAmount() == 0) {
+				continue;
+			}
+			if (chestItem.isCompacted()) {
+				itemCount += stackSize * chestItem.getAmount();
+				color = 0x9966ff;
+			} else {
+				itemCount += chestItem.getAmount();
+			}
+			if (chestItem.isEnchanted()) {
+				color = 0x99ccff;
+			}
+		}
 		ModWaypoint point = new ModWaypoint(WPClientForgeMod.MODID, loc.toString() + ";;WPC", "itemLocations",
-				ItemUtils.prettifyItemCountWaypointName(item.getID(), 666) + " " + name, (int) loc.getX(), (int) loc.getY(),
-				(int) loc.getZ(), icon, 0x99ccff, false, 0);
+				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount) + " " + name, (int) loc.getX(),
+				(int) loc.getY(), (int) loc.getZ(), icon, color, false, 0);
 		points.add(point);
 		try {
 			jmAPI.show(point);

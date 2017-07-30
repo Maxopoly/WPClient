@@ -1,4 +1,6 @@
-package com.github.maxopoly.WPClient;
+package com.github.maxopoly.WPClient.listener;
+
+import com.github.maxopoly.WPClient.WPClientForgeMod;
 
 import com.github.maxopoly.WPClient.connection.ServerConnection;
 import com.github.maxopoly.WPClient.packetCreation.ItemLocationRequestPacket;

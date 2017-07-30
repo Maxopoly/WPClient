@@ -104,11 +104,12 @@ public class PlayerLocationWaypointHandler {
 			if (leftOver.equals(mc.thePlayer.getName())) {
 				continue;
 			}
-			createPlayerWaypoint(leftOver, tracker.getLastKnownLocation(leftOver));
+			createPlayerWaypoint(leftOver, tracker.getLastKnownLocation(leftOver).getLocation());
 			pointsToUpdate.remove(leftOver);
 		}
 		// all other way points are old and their timer needs to be updated
 		Iterator<Entry<String, ModWaypoint>> iter = pointsToUpdate.entrySet().iterator();
+		long currentTime = System.currentTimeMillis();
 		while (iter.hasNext()) {
 			Entry<String, ModWaypoint> entry = iter.next();
 			String playerName = entry.getKey();
@@ -123,7 +124,8 @@ public class PlayerLocationWaypointHandler {
 				standing = 0;
 			}
 			int color = getStandingColor(standing);
-			long sinceLastSeen = tracker.getMillisSinceLastReport(playerName);
+			long lastSeen = tracker.getLastKnownLocation(playerName).getTimeStamp();
+			long sinceLastSeen = currentTime - lastSeen;
 			ModWaypoint wayPoint = entry.getValue();
 			if (sinceLastSeen > timerStartMilliSeconds) {
 				if (sinceLastSeen > playerLocationTimeout) {

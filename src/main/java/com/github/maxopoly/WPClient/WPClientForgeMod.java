@@ -1,19 +1,22 @@
 package com.github.maxopoly.WPClient;
 
 import com.github.maxopoly.WPClient.connection.ServerConnection;
-import com.github.maxopoly.WPClient.packetCreation.RenderDistancePlayerPacket;
-import com.github.maxopoly.WPCommon.model.Location;
+import com.github.maxopoly.WPClient.listener.ChestContentListener;
+import com.github.maxopoly.WPClient.listener.JEI_GUI_Listener;
+import com.github.maxopoly.WPClient.listener.MainMenuGUIListener;
+import com.github.maxopoly.WPClient.listener.PlayerProximityListener;
+import com.github.maxopoly.WPClient.listener.SnitchHitHandler;
+import com.github.maxopoly.WPClient.packetCreation.PlayerLocationPacket;
+import com.github.maxopoly.WPClient.session.SessionManager;
 import com.github.maxopoly.WPCommon.model.LocationTracker;
-import java.util.HashMap;
+import com.github.maxopoly.WPCommon.model.LoggedPlayerLocation;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
@@ -21,7 +24,6 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +38,7 @@ public class WPClientForgeMod {
 
 	private Minecraft mc;
 	private ServerConnection connection;
+	private SessionManager sessionManager;
 	private Logger logger;
 	private boolean enabled;
 
@@ -47,6 +50,10 @@ public class WPClientForgeMod {
 		return connection;
 	}
 
+	public SessionManager getSessionManager() {
+		return sessionManager;
+	}
+
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		instance = this;
@@ -56,6 +63,9 @@ public class WPClientForgeMod {
 		MinecraftForge.EVENT_BUS.register(new SnitchHitHandler(logger));
 		MinecraftForge.EVENT_BUS.register(new JEI_GUI_Listener());
 		MinecraftForge.EVENT_BUS.register(new ChestContentListener());
+		MinecraftForge.EVENT_BUS.register(new MainMenuGUIListener());
+		MinecraftForge.EVENT_BUS.register(new PlayerProximityListener());
+		sessionManager = new SessionManager(mc, logger);
 		connection = new ServerConnection(mc, logger);
 		new Thread(new Runnable() {
 
@@ -71,7 +81,7 @@ public class WPClientForgeMod {
 			public void run() {
 				sendPlayerLocations();
 			}
-		}, 5, 1, TimeUnit.SECONDS);
+		}, 5, 500, TimeUnit.MILLISECONDS);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -84,27 +94,6 @@ public class WPClientForgeMod {
 			enabled = false;
 			logger.info("Disabling WPClient, wrong IP " + ip);
 		}
-	}
-
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onTick(ClientTickEvent event) {
-		// update locations of all players in render distance
-		if (!isConnectionReady()) {
-			return;
-		}
-		if (mc.theWorld == null) {
-			return;
-		}
-		LocationTracker tracker = LocationTracker.getInstance();
-		for (Entity entity : mc.theWorld.playerEntities) {
-			if (!(entity instanceof EntityOtherPlayerMP)) {
-				continue;
-			}
-			Vec3d pos = entity.getPositionVector();
-			tracker.reportLocation(entity.getName(), new Location(pos.xCoord, pos.yCoord, pos.zCoord));
-		}
-		Vec3d pos = mc.thePlayer.getPositionVector();
-		tracker.reportLocation(mc.thePlayer.getName(), new Location(pos.xCoord, pos.yCoord, pos.zCoord));
 	}
 
 	public void reconnect() {
@@ -142,11 +131,11 @@ public class WPClientForgeMod {
 		if (pendingUpdates.isEmpty()) {
 			return;
 		}
-		Map<String, Location> players = new HashMap<String, Location>();
+		Set<LoggedPlayerLocation> players = new HashSet<LoggedPlayerLocation>();
 		for (String player : pendingUpdates) {
-			players.put(player, tracker.getLastKnownLocation(player));
+			players.add(tracker.getLastKnownLocation(player));
 		}
-		RenderDistancePlayerPacket updatePacket = new RenderDistancePlayerPacket(players);
+		PlayerLocationPacket updatePacket = new PlayerLocationPacket(players);
 		connection.sendMessage(updatePacket.getMessage());
 	}
 

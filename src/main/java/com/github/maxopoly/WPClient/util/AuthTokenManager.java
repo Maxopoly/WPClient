@@ -1,5 +1,6 @@
 package com.github.maxopoly.WPClient.util;
 
+import com.github.maxopoly.WPClient.model.PlayerAuth;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,18 +20,15 @@ public class AuthTokenManager {
 	private final static String authServerAdress = "https://authserver.mojang.com";
 	private final static String sessionServerAdress = "https://sessionserver.mojang.com/session/minecraft/join";
 
-	public static String refreshToken(Logger logger, String accessToken, String playerID, String playerName,
-			String clientToken) throws IOException {
-		String result = sendPost(constructRefreshJSON(accessToken, playerID, playerName, clientToken), authServerAdress
-				+ "/refresh", logger);
+	public static String refreshToken(Logger logger, String accessToken, String clientToken) throws IOException {
+		String result = sendPost(constructRefreshJSON(accessToken, clientToken), authServerAdress + "/refresh", logger);
 		JSONObject jsonResult = new JSONObject(result);
 		accessToken = jsonResult.getString("accessToken");
 		String receivedClientToken = jsonResult.getString("clientToken");
 		if (!clientToken.equals(receivedClientToken)) {
 			throw new IOException("Received different client token during access token refresh");
 		}
-		logger.info("Successfully refreshed access token for " + playerName);
-		return receivedClientToken;
+		return accessToken;
 	}
 
 	public static boolean validateToken(Logger logger, String accessToken, String clientToken) throws IOException {
@@ -52,12 +50,13 @@ public class AuthTokenManager {
 	 * For some reason minecraft only allows setting the auth token once in the launcher and doesnt refresh it further,
 	 * which results in invalid sessions. Here we do some dirty stuff to update this final token field.
 	 */
-	public static void overwriteAuthSession(Minecraft mc, Session replacementSession) {
+	public static void overwriteAuthSession(PlayerAuth auth) {
+		Minecraft mc = Minecraft.getMinecraft();
+		Session replacementSession = new Session(auth.getName(), auth.getUUID(), auth.getAuthToken(), "mojang");
 		try {
 			Session session = mc.getSession();
 			// we dont know the actual name of the field, because I dont feel like digging through tons of obfuscated code.
-			// This
-			// will do
+			// This will do
 			for (Field field : mc.getClass().getDeclaredFields()) {
 				field.setAccessible(true);
 				if (field.get(mc) == session) {
@@ -87,44 +86,35 @@ public class AuthTokenManager {
 	}
 
 	private static String sendPost(String content, String url, Logger logger) throws IOException {
-		try {
-			byte[] contentBytes = content.getBytes("UTF-8");
-			URL obj = new URL(url);
-			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-			con.setDoOutput(true);
-			con.setDoInput(true);
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Accept-Charset", "UTF-8");
-			con.setRequestProperty("Content-Length", Integer.toString(contentBytes.length));
+		byte[] contentBytes = content.getBytes("UTF-8");
+		URL obj = new URL(url);
+		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+		con.setDoOutput(true);
+		con.setDoInput(true);
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Accept-Charset", "UTF-8");
+		con.setRequestProperty("Content-Length", Integer.toString(contentBytes.length));
 
-			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			wr.write(contentBytes, 0, contentBytes.length);
-			wr.close();
-			int responseCode = con.getResponseCode();
-			if ((responseCode / 100) != 2) { // we want a 200 something response code
-				throw new IOException("POST to " + url + " returned bad response code " + responseCode);
-			}
-			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-			return response.toString();
-		} catch (Exception e) {
-			logger.error("Exception occured", e);
-			throw new IOException("Failed to send POST to " + url + " : " + e.getClass());
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.write(contentBytes, 0, contentBytes.length);
+		wr.close();
+		int responseCode = con.getResponseCode();
+		if ((responseCode / 100) != 2) { // we want a 200 something response code
+			throw new IOException("POST to " + url + " returned bad response code " + responseCode);
 		}
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+		return response.toString();
 	}
 
-	private static String constructRefreshJSON(String oldToken, String playerUUID, String playerName, String clientToken) {
-		JSONObject json1 = new JSONObject();
-		json1.put("id", playerUUID);
-		json1.put("name", playerName);
+	private static String constructRefreshJSON(String oldToken, String clientToken) {
 		JSONObject json = new JSONObject();
-		json.put("selectedProfile", json1);
 		json.put("accessToken", oldToken);
 		json.put("clientToken", clientToken);
 		return json.toString();

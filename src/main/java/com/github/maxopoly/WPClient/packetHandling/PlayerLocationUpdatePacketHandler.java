@@ -1,12 +1,13 @@
 package com.github.maxopoly.WPClient.packetHandling;
 
-import com.github.maxopoly.WPCommon.model.Location;
 import com.github.maxopoly.WPCommon.model.LocationTracker;
+import com.github.maxopoly.WPCommon.model.LoggedPlayerLocation;
 import com.github.maxopoly.WPCommon.packetHandling.AbstractPacketHandler;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PlayerLocationUpdatePacketHandler extends AbstractPacketHandler {
@@ -34,13 +35,12 @@ public class PlayerLocationUpdatePacketHandler extends AbstractPacketHandler {
 	@Override
 	public void handle(JSONObject msg) {
 		synchronized (updatedPlayers) {
-			JSONObject data = msg.getJSONObject("locations");
+			JSONArray data = msg.getJSONArray("locs");
 			LocationTracker tracker = LocationTracker.getInstance();
-			for (Object nameObject : data.names()) {
-				String name = (String) nameObject;
-				Location loc = new Location(data.getJSONObject(name));
-				updatedPlayers.add(name);
-				tracker.reportLocally(name, loc);
+			for (int i = 0; i < data.length(); i++) {
+				LoggedPlayerLocation loc = new LoggedPlayerLocation(data.getJSONObject(i));
+				updatedPlayers.add(loc.getPlayer());
+				tracker.reportLocally(loc);
 			}
 		}
 	}

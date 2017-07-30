@@ -1,7 +1,8 @@
-package com.github.maxopoly.WPClient;
+package com.github.maxopoly.WPClient.listener;
+
+import com.github.maxopoly.WPClient.WPClientForgeMod;
 
 import com.github.maxopoly.WPClient.connection.ServerConnection;
-import com.github.maxopoly.WPClient.packetCreation.SnitchHitPacket;
 import com.github.maxopoly.WPClient.packetHandling.PlayerLocationUpdatePacketHandler;
 import com.github.maxopoly.WPCommon.model.Location;
 import com.github.maxopoly.WPCommon.model.LocationTracker;
@@ -50,9 +51,8 @@ public class SnitchHitHandler {
 		// TODO parse this out
 		SnitchHitAction action = SnitchHitAction.ENTER;
 		Location loc = new Location(x, y, z);
-		LocationTracker.getInstance().reportLocation(playerName, loc);
+		LocationTracker.getInstance().reportSnitchLocation(playerName, loc);
 		PlayerLocationUpdatePacketHandler.stagePlayerForUpdate(playerName);
-		conn.sendMessage(new SnitchHitPacket(playerName, loc, action).getMessage());
 	}
 
 }

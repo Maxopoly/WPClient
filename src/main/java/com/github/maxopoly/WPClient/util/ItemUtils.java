@@ -19,15 +19,17 @@ public class ItemUtils {
 		int amount = is.stackSize;
 		boolean compacted = false;
 		NBTTagCompound tag = is.getTagCompound();
-		NBTTagCompound displayTag = tag.getCompoundTag("display");
-		if (displayTag != null) {
-			NBTTagList loreList = displayTag.getTagList("Lore", NBT.TAG_STRING);
-			if (loreList != null) {
-				for (int k = 0; k < loreList.tagCount(); k++) {
-					String loreLine = loreList.getStringTagAt(k);
-					if (loreLine.equals(compactedLore)) {
-						compacted = true;
-						break;
+		if (tag != null) {
+			NBTTagCompound displayTag = tag.getCompoundTag("display");
+			if (displayTag != null) {
+				NBTTagList loreList = displayTag.getTagList("Lore", NBT.TAG_STRING);
+				if (loreList != null) {
+					for (int k = 0; k < loreList.tagCount(); k++) {
+						String loreLine = loreList.getStringTagAt(k);
+						if (loreLine.equals(compactedLore)) {
+							compacted = true;
+							break;
+						}
 					}
 				}
 			}
@@ -62,6 +64,9 @@ public class ItemUtils {
 
 	public static String prettifyItemCountWaypointName(int id, int count) {
 		int stackSize = getStackSizeById(id);
+		if (stackSize == 1) {
+			return String.valueOf(count);
+		}
 		int stacks = count / stackSize;
 		if (stacks == 0) {
 			return String.format("%d", count);
@@ -72,9 +77,10 @@ public class ItemUtils {
 				return "SC";
 			} else if (stacks == 54) {
 				return "DC";
-			}
-			if (stackSize == 1) {
-				return String.valueOf(count);
+			} else if (stacks == 27 * stackSize) {
+				return "SC compacted";
+			} else if (stacks == 54 * stackSize) {
+				return "DC compacted";
 			}
 			return String.format("%d x %d", stacks, stackSize);
 		}
