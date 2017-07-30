@@ -69,4 +69,9 @@ public class PlayerAuth {
 	public String getUserId() {
 		return userID;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("name: %s, email: %s, token: %s, uuid: %s, userId: %s", name, email, authToken, uuid, userID);
+	}
 }

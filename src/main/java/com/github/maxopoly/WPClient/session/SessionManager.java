@@ -23,6 +23,7 @@ public class SessionManager {
 	public static final long authTimeOut = 5 * 60 * 1000; // 5 minutes
 	public static final long authCoolDown = 30 * 1000; // wait at least 10 sec between auth
 
+	private boolean oldFormat;
 	private File launcherProfileFile;
 	private Logger logger;
 
@@ -88,7 +89,14 @@ public class SessionManager {
 			FMLLog.getLogger().info("No auth section found in file to input replaced token");
 			return;
 		}
-		JSONObject authObj = authSection.getJSONObject(auth.getUUID());
+
+		JSONObject authObj;
+
+		if (oldFormat) {
+			authObj = authSection.optJSONObject(auth.getUUID());
+		} else {
+			authObj = authSection.optJSONObject(auth.getUserId());
+		}
 		if (authObj == null) {
 			FMLLog.getLogger().info("Specific auth section didnt exist in token file, could not input replaced token");
 			return;
@@ -122,12 +130,8 @@ public class SessionManager {
 		if (json == null) {
 			return;
 		}
-		clientToken = json.getString("clientToken");
-		if (clientToken == null) {
-			FMLLog.getLogger().info("File did not have a client token, generating one...");
-			clientToken = UUID.randomUUID().toString();
-		}
-		JSONObject authSection = json.getJSONObject("authenticationDatabase");
+		clientToken = json.optString("clientToken", UUID.randomUUID().toString());
+		JSONObject authSection = json.optJSONObject("authenticationDatabase");
 		if (authSection == null) {
 			FMLLog.getLogger().info("No auth section found in file");
 			return;
@@ -139,13 +143,34 @@ public class SessionManager {
 		}
 		knownAuth.clear();
 		for (int i = 0; i < names.length(); i++) {
-			String uuidDashLess = names.getString(i);
-			JSONObject authObj = authSection.getJSONObject(uuidDashLess);
-			String name = authObj.getString("displayName");
+			String identifier = names.getString(i);
+			JSONObject authObj = authSection.getJSONObject(identifier);
+			String name = authObj.optString("displayName", null);
 			String accessToken = authObj.getString("accessToken");
 			String email = authObj.getString("username");
-			String userID = authObj.getString("userid");
-			PlayerAuth auth = new PlayerAuth(name, accessToken, email, uuidDashLess, userID);
+			oldFormat = name != null;
+			PlayerAuth auth;
+			if (oldFormat) {
+				String userID = authObj.getString("userid");
+				auth = new PlayerAuth(name, accessToken, email, identifier, userID);
+			} else {
+				JSONObject profiles = authObj.optJSONObject("profiles");
+				if (profiles == null) {
+					continue;
+				}
+				JSONArray profileNames = profiles.names();
+				if (profileNames == null) {
+					continue;
+				}
+				String uuid = "";
+				for (int k = 0; k < profileNames.length(); k++) {
+					JSONObject section = profiles.getJSONObject(profileNames.getString(k));
+					uuid = profileNames.getString(k);
+					name = section.getString("displayName");
+				}
+				auth = new PlayerAuth(name, accessToken, email, uuid, identifier);
+			}
+			logger.info("Loaded " + auth.toString());
 			knownAuth.put(auth.getName(), auth);
 			FMLLog.getLogger().info("Loading auth for player " + name);
 		}

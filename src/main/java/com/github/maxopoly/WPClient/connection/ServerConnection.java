@@ -32,7 +32,7 @@ public class ServerConnection {
 	private static final String serverAdress = "168.235.102.74";
 	private final static String sessionServerAdress = "https://sessionserver.mojang.com/session/minecraft/join";
 
-	private static final String tag = "thoths";
+	private static final String tag = "gerg";
 
 	private Logger logger;
 	private PacketForwarder packetHandler;
@@ -85,6 +85,7 @@ public class ServerConnection {
 					byte[] decrypted = encrypter.decrypt(dataArray);
 					byte[] decompressed = CompressionManager.decompress(decrypted, logger);
 					String dataString = new String(decompressed, StandardCharsets.UTF_8);
+					logger.info("Received: " + dataString);
 					JSONObject json;
 					try {
 						json = new JSONObject(dataString);
@@ -116,6 +117,7 @@ public class ServerConnection {
 			public void run() {
 				synchronized (output) {
 					try {
+						logger.info("Sending: " + json.toString());
 						byte[] rawData = json.toString().getBytes(StandardCharsets.UTF_8);
 						byte[] compressed = CompressionManager.compress(rawData);
 						VarInt.writeVarInt(output, compressed.length, encrypter);
