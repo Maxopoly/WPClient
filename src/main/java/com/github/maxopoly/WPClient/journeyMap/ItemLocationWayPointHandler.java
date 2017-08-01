@@ -57,8 +57,10 @@ public class ItemLocationWayPointHandler {
 		}
 		int sum = 0;
 		for (Chest chest : chests) {
-			createWaypoint(item, chest, prettyName);
 			sum += ItemUtils.calculateItemCount(chest);
+		}
+		for (Chest chest : chests) {
+			createWaypoint(item, chest, prettyName, sum);
 		}
 		if (mc.thePlayer != null) {
 			String s = "s";
@@ -93,7 +95,7 @@ public class ItemLocationWayPointHandler {
 		points.clear();
 	}
 
-	private void createWaypoint(WPItem item, Chest chest, String name) {
+	private void createWaypoint(WPItem item, Chest chest, String name, int totalCount) {
 		Location loc = chest.getLocation();
 		int stackSize = ItemUtils.getStackSizeById(item.getID());
 		int itemCount = 0;
@@ -113,8 +115,8 @@ public class ItemLocationWayPointHandler {
 			}
 		}
 		ModWaypoint point = new ModWaypoint(WPClientForgeMod.MODID, loc.toString() + ";;WPC", "itemLocations",
-				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount) + " " + name, (int) loc.getX(),
-				(int) loc.getY(), (int) loc.getZ(), icon, color, false, 0);
+				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount, totalCount, false) +
+				" " + name, (int) loc.getX(), (int) loc.getY(), (int) loc.getZ(), icon, color, false, 0);
 		points.add(point);
 		try {
 			jmAPI.show(point);

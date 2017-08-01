@@ -65,29 +65,33 @@ public class ItemUtils {
 		return String.format("%d x %d + %d [%,d]", stacks, stackSize, leftover, count);
 	}
 
-	public static String prettifyItemCountWaypointName(int id, int count) {
+	public static String prettifyItemCountWaypointName(int id, int count, int totalCount, boolean showTotalPercentage) {
+		String totalCountPerc = "";
+		if (showTotalPercentage) {
+			totalCountPerc = String.format("{%02d%%} ", Math.round((((double) count) / totalCount) * 100));
+		}
 		int stackSize = getStackSizeById(id);
 		if (stackSize == 1) {
 			return String.valueOf(count);
 		}
 		int stacks = count / stackSize;
 		if (stacks == 0) {
-			return String.format("%d", count);
+			return String.format("%s%d", totalCountPerc, count);
 		}
 		int leftover = count % stackSize;
 		if (leftover == 0) {
 			if (stacks == 27) {
-				return "SC";
+				return String.format("%sSC", totalCountPerc);
 			} else if (stacks == 54) {
-				return "DC";
+				return String.format("%sDC", totalCountPerc);
 			} else if (stacks == 27 * stackSize) {
-				return "SC compacted";
+				return String.format("%sSC compacted", totalCountPerc);
 			} else if (stacks == 54 * stackSize) {
-				return "DC compacted";
+				return String.format("%sDC compacted", totalCountPerc);
 			}
-			return String.format("%d x %d", stacks, stackSize);
+			return String.format("%s%d x %d", totalCountPerc, stacks, stackSize);
 		}
-		return String.format("~%d x %d", stacks, stackSize);
+		return String.format("%s~%d x %d", totalCountPerc, stacks, stackSize);
 	}
 
 	public static int calculateItemCount(Chest c) {
