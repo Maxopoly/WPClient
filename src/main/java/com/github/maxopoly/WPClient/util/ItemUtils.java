@@ -51,6 +51,9 @@ public class ItemUtils {
 
 	public static String prettifyItemCount(int id, int count) {
 		int stackSize = getStackSizeById(id);
+		if (stackSize == 1) {
+			return String.valueOf(count);
+		}
 		int stacks = count / stackSize;
 		if (stacks == 0) {
 			return String.format("%d", count);
