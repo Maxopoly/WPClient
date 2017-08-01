@@ -40,7 +40,7 @@ public class ItemUtils {
 	/**
 	 * Turns a WPItem into a minecraft ItemStack. Only takes id, amount and durability into account, enchanting and
 	 * compaction is ignored as this is only needed for getting the name of the item
-	 * 
+	 *
 	 * @param item
 	 *          Item to convert
 	 * @return Equivalent ItemStack
@@ -104,10 +104,9 @@ public class ItemUtils {
 		return item.getItemStackLimit(new ItemStack(item));
 	}
 
-	public static String getPrettyName(int id) {
-		Item item = Item.getItemById(id);
-		String name = item.getItemStackDisplayName(new ItemStack(item));
-		String[] splitName = name.split("\\.");
-		return splitName[splitName.length - 1];
+	public static String getPrettyName(WPItem wpItem) {
+		Item item = Item.getItemById(wpItem.getID());
+		ItemStack itemStack = new ItemStack(item, 0, wpItem.getDurability());
+		return itemStack.getDisplayName();
 	}
 }

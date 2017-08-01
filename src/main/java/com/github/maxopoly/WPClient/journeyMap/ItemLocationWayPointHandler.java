@@ -48,7 +48,7 @@ public class ItemLocationWayPointHandler {
 	public synchronized void markLocations(WPItem item, List<Chest> chests) {
 		hideAll();
 		scheduleRemoval();
-		String prettyName = ItemUtils.getPrettyName(item.getID());
+		String prettyName = ItemUtils.getPrettyName(item);
 		if (chests.isEmpty() && mc.thePlayer != null) {
 			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
 					"%s[WPC]  %sError:  %sCouldn't find any %s%s%s.", TextFormatting.BLUE, TextFormatting.RED,
