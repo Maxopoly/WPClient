@@ -76,7 +76,6 @@ public class PlayerLocationWaypointHandler {
 			logger.error("Failed to add waypoint", e);
 		}
 		return point;
-
 	}
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
@@ -129,7 +128,7 @@ public class PlayerLocationWaypointHandler {
 			ModWaypoint wayPoint = entry.getValue();
 			if (sinceLastSeen > timerStartMilliSeconds) {
 				if (sinceLastSeen > playerLocationTimeout) {
-					jmAPI.remove(wayPoint);
+					JourneyMapPlugin.dirtyWayPointRemoval(wayPoint);
 					continue;
 				}
 				String wayPointName = constructPlayerInfoString(playerName, play);

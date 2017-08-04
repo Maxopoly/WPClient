@@ -59,6 +59,7 @@ public class WPClientForgeMod {
 		instance = this;
 		mc = Minecraft.getMinecraft();
 		logger = FMLLog.getLogger();
+		logger.info("Enabling WPClient");
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new SnitchHitHandler(logger));
 		MinecraftForge.EVENT_BUS.register(new JEI_GUI_Listener());
@@ -87,12 +88,13 @@ public class WPClientForgeMod {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onConnect(ClientConnectedToServerEvent e) {
 		String ip = mc.getCurrentServerData().serverIP;
+		logger.info("[WPC]Connecting to  " + ip);
 		if (ip.endsWith(serverIP)) {
 			enabled = true;
-			logger.info("Enabling WPClient, connecting to " + ip);
+			logger.info("[WPC]Enabling functionality as player is connecting to right ip");
 		} else {
 			enabled = false;
-			logger.info("Disabling WPClient, wrong IP " + ip);
+			logger.info("[WPC]Disabling functionality as player is connecting to wrong ip");
 		}
 	}
 

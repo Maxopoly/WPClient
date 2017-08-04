@@ -90,7 +90,7 @@ public class ItemLocationWayPointHandler {
 
 	public synchronized void hideAll() {
 		for (ModWaypoint point : points) {
-			jmAPI.remove(point);
+			JourneyMapPlugin.dirtyWayPointRemoval(point);
 		}
 		points.clear();
 	}
@@ -115,8 +115,8 @@ public class ItemLocationWayPointHandler {
 			}
 		}
 		ModWaypoint point = new ModWaypoint(WPClientForgeMod.MODID, loc.toString() + ";;WPC", "itemLocations",
-				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount, totalCount, false) +
-				" " + name, (int) loc.getX(), (int) loc.getY(), (int) loc.getZ(), icon, color, false, 0);
+				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount, totalCount, false) + " " + name,
+				(int) loc.getX(), (int) loc.getY(), (int) loc.getZ(), icon, color, false, 0);
 		points.add(point);
 		try {
 			jmAPI.show(point);
