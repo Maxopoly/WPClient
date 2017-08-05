@@ -1,7 +1,6 @@
 package com.github.maxopoly.WPClient.listener;
 
 import com.github.maxopoly.WPClient.WPClientForgeMod;
-
 import com.github.maxopoly.WPClient.util.CustomGUIChest;
 import com.github.maxopoly.WPCommon.model.Location;
 import java.lang.reflect.Field;

