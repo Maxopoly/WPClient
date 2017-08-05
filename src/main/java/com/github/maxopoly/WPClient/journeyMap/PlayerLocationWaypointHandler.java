@@ -171,19 +171,24 @@ public class PlayerLocationWaypointHandler {
 		return sb.toString();
 	}
 
-	private int getStandingColor(int standing) {
-		if (standing > 5) {
-			return 0x009933;
+	private static int getStandingColor(int standing) {
+		if (standing >= 0) {
+			return scaleColor(0xffff66, 0x009933, standing / 10.0);
 		}
-		if (standing > 0) {
-			return 0x99ff66;
+		return scaleColor(0xffff66, 0xff0000, -1 * (standing / 10.0));
+	}
+
+	private static int scaleColor(int lowerBound, int upperBound, double progress) {
+		if (progress > 1.0 || progress < 0.0) {
+			throw new IllegalArgumentException("Progress must be within [0,1]");
 		}
-		if (standing == 0) {
-			return 0xffff66;
-		}
-		if (standing > -5) {
-			return 0xff9933;
-		}
-		return 0xff0000;
+		return subScaleInt(lowerBound, upperBound, progress, 16) | subScaleInt(lowerBound, upperBound, progress, 8)
+				| subScaleInt(lowerBound, upperBound, progress, 0);
+	}
+
+	private static int subScaleInt(int lower, int upper, double progress, int shift) {
+		int shiftedLower = (lower >>> shift) & 0xff;
+		int shiftedUpper = (upper >>> shift) & 0xff;
+		return ((int) (((shiftedUpper - shiftedLower) * progress) + shiftedLower) & 0xff) << shift;
 	}
 }
