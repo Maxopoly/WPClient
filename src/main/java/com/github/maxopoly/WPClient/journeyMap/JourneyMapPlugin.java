@@ -2,6 +2,7 @@ package com.github.maxopoly.WPClient.journeyMap;
 
 import com.google.common.cache.Cache;
 import com.google.common.collect.HashBasedTable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import journeymap.client.api.IClientAPI;
@@ -42,6 +43,11 @@ public class JourneyMapPlugin implements IClientPlugin {
 			HashBasedTable<Object, Object, Object> wayPoints = (HashBasedTable<Object, Object, Object>) wayPointTable
 					.get(pluginWrapper);
 			Object wayPoint = wayPoints.remove(modWaypoint.getDisplayId(), modWaypoint);
+			if (wayPoint == null) {
+				Class<?> wayPointClass = Class.forName("journeymap.client.model.Waypoint");
+				Constructor wayPointConstructor = wayPointClass.getConstructor(ModWaypoint.class);
+				wayPoint = wayPointConstructor.newInstance(modWaypoint);
+			}
 			Method getIDMethod = wayPoint.getClass().getDeclaredMethod("getId");
 			getIDMethod.setAccessible(true);
 			String wayPointId = (String) getIDMethod.invoke(wayPoint);
