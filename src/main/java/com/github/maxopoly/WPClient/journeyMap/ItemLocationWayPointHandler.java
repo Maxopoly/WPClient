@@ -98,6 +98,7 @@ public class ItemLocationWayPointHandler {
 	private void createWaypoint(WPItem item, Chest chest, String name, int totalCount) {
 		Location loc = chest.getLocation();
 		int stackSize = ItemUtils.getStackSizeById(item.getID());
+		int compactionMultiplier = stackSize == 1 ? 8 : stackSize;
 		int itemCount = 0;
 		int color = 0x66fff;
 		for (WPItem chestItem : chest.getContent()) {
@@ -105,7 +106,7 @@ public class ItemLocationWayPointHandler {
 				continue;
 			}
 			if (chestItem.isCompacted()) {
-				itemCount += stackSize * chestItem.getAmount();
+				itemCount += compactionMultiplier * chestItem.getAmount();
 				color = 0x9966ff;
 			} else {
 				itemCount += chestItem.getAmount();

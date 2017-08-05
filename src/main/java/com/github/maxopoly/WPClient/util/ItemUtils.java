@@ -33,6 +33,13 @@ public class ItemUtils {
 					}
 				}
 			}
+			// check for potion tag if its a potion, splash potion or lingering potion
+			if (itemID == 373 || itemID == 438 || itemID == 441) {
+				String potionTag = tag.getString("Potion");
+				if (potionTag != null && !potionTag.equals("")) {
+					durability = PotionTranslater.getIdByName(potionTag);
+				}
+			}
 		}
 		return new WPItem(itemID, amount, durability, compacted, enchanted);
 	}
@@ -46,7 +53,19 @@ public class ItemUtils {
 	 * @return Equivalent ItemStack
 	 */
 	public static ItemStack convertItem(WPItem item) {
-		return new ItemStack(Item.getItemById(item.getID()), item.getAmount(), item.getDurability());
+		int itemID = item.getID();
+		int dura = item.getDurability();
+		// check for potion tag if its a potion, splash potion or lingering potion
+		if (dura != 0 && (itemID == 373 || itemID == 438 || itemID == 441)) {
+			NBTTagCompound tag = new NBTTagCompound();
+			String potionName = PotionTranslater.getNameById(dura);
+			if (potionName != null) {
+				tag.setString("Potion", PotionTranslater.getNameById(dura));
+				dura = 0;
+				return new ItemStack(Item.getItemById(itemID), item.getAmount(), dura, tag);
+			}
+		}
+		return new ItemStack(Item.getItemById(itemID), item.getAmount(), dura);
 	}
 
 	public static String prettifyItemCount(int id, int count) {
@@ -71,9 +90,7 @@ public class ItemUtils {
 			totalCountPerc = String.format("{%02d%%} ", Math.round((((double) count) / totalCount) * 100));
 		}
 		int stackSize = getStackSizeById(id);
-		if (stackSize == 1) {
-			return String.valueOf(count);
-		}
+		int compactionMultiplier = stackSize == 1 ? 8 : stackSize;
 		int stacks = count / stackSize;
 		if (stacks == 0) {
 			return String.format("%s%d", totalCountPerc, count);
@@ -84,14 +101,13 @@ public class ItemUtils {
 				return String.format("%sSC", totalCountPerc);
 			} else if (stacks == 54) {
 				return String.format("%sDC", totalCountPerc);
-			} else if (stacks == 27 * stackSize) {
+			} else if (stacks == 27 * compactionMultiplier) {
 				return String.format("%sSC compacted", totalCountPerc);
-			} else if (stacks == 54 * stackSize) {
+			} else if (stacks == 54 * compactionMultiplier) {
 				return String.format("%sDC compacted", totalCountPerc);
 			}
-			return String.format("%s%d x %d", totalCountPerc, stacks, stackSize);
 		}
-		return String.format("%s~%d x %d", totalCountPerc, stacks, stackSize);
+		return String.format("%s%s%d x %d", totalCountPerc, leftover != 0 ? "~" : "", stacks, stackSize);
 	}
 
 	public static int calculateItemCount(Chest c) {
@@ -100,7 +116,9 @@ public class ItemUtils {
 			if (!item.isCompacted()) {
 				count += item.getAmount();
 			} else {
-				count += getStackSizeById(item.getID()) * item.getAmount();
+				int stackSize = getStackSizeById(item.getID());
+				int compactionMultiplier = stackSize == 1 ? 8 : stackSize;
+				count += compactionMultiplier * item.getAmount();
 			}
 		}
 		return count;
@@ -112,8 +130,16 @@ public class ItemUtils {
 	}
 
 	public static String getPrettyName(WPItem wpItem) {
-		Item item = Item.getItemById(wpItem.getID());
-		ItemStack itemStack = new ItemStack(item, 0, wpItem.getDurability());
-		return itemStack.getDisplayName();
+		if (wpItem.getID() == 373) {
+			return PotionTranslater.getPrettyName(wpItem.getDurability()) + " Pot";
+		}
+		if (wpItem.getID() == 438) {
+			return PotionTranslater.getPrettyName(wpItem.getDurability()) + " Splash Pot";
+		}
+		if (wpItem.getID() == 441) {
+			return PotionTranslater.getPrettyName(wpItem.getDurability()) + " Lingering Pot";
+		}
+		return convertItem(wpItem).getDisplayName();
+
 	}
 }

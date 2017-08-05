@@ -1,5 +1,6 @@
 package com.github.maxopoly.WPClient.connection;
 
+import com.github.maxopoly.WPClient.packetHandling.CrashHandler;
 import com.github.maxopoly.WPClient.packetHandling.ItemLocationPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.PlayerInformationPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.PlayerLocationUpdatePacketHandler;
@@ -17,6 +18,7 @@ public class ClientSidePacketForwarder extends PacketForwarder {
 		registerPacketHandler(new PlayerInformationPacketHandler());
 		registerPacketHandler(new PlayerLocationUpdatePacketHandler());
 		registerPacketHandler(new ItemLocationPacketHandler());
+		registerPacketHandler(new CrashHandler());
 	}
 
 }
