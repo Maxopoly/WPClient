@@ -57,8 +57,7 @@ public class CustomGUIChest extends GuiChest {
 				content.add(item);
 			}
 		}
-		WPClientForgeMod.getInstance().getServerConnection()
-				.sendMessage(new ChestContentPacket(location, content).getMessage());
+		WPClientForgeMod.getInstance().getServerConnection().sendMessage(new ChestContentPacket(location, content));
 	}
 
 	private IInventory getUpperInv() {

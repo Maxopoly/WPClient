@@ -34,7 +34,7 @@ public class AccountCache {
 	public Player getPlayerInfoFor(String acc) {
 		Player player = players.get(acc);
 		if (player == null && !requestedPlayers.contains(acc.toLowerCase())) {
-			WPClientForgeMod.getInstance().getServerConnection().sendMessage(new RequestPlayerInfoPacket(acc).getMessage());
+			WPClientForgeMod.getInstance().getServerConnection().sendMessage(new RequestPlayerInfoPacket(acc));
 			requestedPlayers.add(acc.toLowerCase());
 		}
 		return player;

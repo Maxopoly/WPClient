@@ -1,9 +1,10 @@
 package com.github.maxopoly.WPClient.connection;
 
 import com.github.maxopoly.WPClient.WPClientForgeMod;
-import com.github.maxopoly.WPCommon.packetHandling.PacketForwarder;
+import com.github.maxopoly.WPClient.packetCreation.AuthPlayerPacket;
+import com.github.maxopoly.WPCommon.packetHandling.outgoing.IPacket;
+import com.github.maxopoly.WPCommon.packetHandling.outgoing.OutgoingDataHandler;
 import com.github.maxopoly.WPCommon.util.AES_CFB8_Encrypter;
-import com.github.maxopoly.WPCommon.util.CompressionManager;
 import com.github.maxopoly.WPCommon.util.ConnectionUtils;
 import com.github.maxopoly.WPCommon.util.PKCSEncrypter;
 import com.github.maxopoly.WPCommon.util.VarInt;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -23,19 +23,20 @@ import java.security.spec.X509EncodedKeySpec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ServerConnection {
 
 	private static final int port = 23452;
+	private static final int testPort = 23453;
 	private static final String serverAdress = "168.235.102.74";
 	private final static String sessionServerAdress = "https://sessionserver.mojang.com/session/minecraft/join";
 
 	private static final String tag = "tankbuster";
 
 	private Logger logger;
-	private PacketForwarder packetHandler;
+	private ClientSidePacketForwarder packetHandler;
+	private OutgoingDataHandler packetSender;
 	private boolean closed;
 	private boolean initialized;
 
@@ -51,7 +52,6 @@ public class ServerConnection {
 		this.logger = logger;
 		this.mc = mc;
 		this.initialized = false;
-		this.packetHandler = new ClientSidePacketForwarder(logger);
 	}
 
 	public void start() {
@@ -64,75 +64,43 @@ public class ServerConnection {
 			return;
 		}
 		figureOutEncryption();
-		authPlayer();
-		logger.info("Successfully connected to server");
-		handleAvailablePackets();
+		if (closed) {
+			return;
+		}
+		Runnable failureCallback = new Runnable() {
+
+			@Override
+			public void run() {
+				close();
+
+			}
+		};
+		this.packetHandler = new ClientSidePacketForwarder(logger, input, encrypter, failureCallback);
+		this.packetSender = new OutgoingDataHandler(output, encrypter, failureCallback);
+		if (authPlayer()) {
+			initialized = true;
+			packetHandler.startHandling();
+		} else {
+			logger.info("Failed to connect to server");
+			close();
+		}
 	}
 
 	public boolean isInitialized() {
 		return initialized;
 	}
 
-	public void handleAvailablePackets() {
-		logger.info("Setting up packet listener for WPC");
-		this.initialized = true;
-		while (!closed) {
-			try {
-				while (input.available() > 0) {
-					int packetLength = VarInt.readVarInt(input, encrypter);
-					byte[] dataArray = new byte[packetLength];
-					input.readFully(dataArray);
-					byte[] decrypted = encrypter.decrypt(dataArray);
-					byte[] decompressed = CompressionManager.decompress(decrypted, logger);
-					String dataString = new String(decompressed, StandardCharsets.UTF_8);
-					JSONObject json;
-					try {
-						json = new JSONObject(dataString);
-					} catch (JSONException e) {
-						logger.error("Received invalid msg that could not be turned into json: " + dataString);
-						continue;
-					}
-					packetHandler.handlePacket(json);
-				}
-			} catch (IOException e) {
-				logger.error("Error handling incoming packets", e);
-				closed = true;
-				WPClientForgeMod.getInstance().reconnect();
-				break;
-			}
-
-		}
-		logger.warn("Stopped packet handling, connection is gone?");
-	}
-
-	public void sendMessage(final JSONObject json) {
+	public void sendMessage(final IPacket packet) {
 		if (closed) {
-			logger.info("Tried to send json, but connection was already closed");
+			logger.info("Tried to send packet, but connection was already closed");
 			return;
 		}
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				synchronized (output) {
-					try {
-						byte[] rawData = json.toString().getBytes(StandardCharsets.UTF_8);
-						byte[] compressed = CompressionManager.compress(rawData);
-						VarInt.writeVarInt(output, compressed.length, encrypter);
-						byte[] encrypted = encrypter.encrypt(compressed);
-						output.write(encrypted);
-					} catch (IOException e) {
-						logger.error("Error while sending packet", e);
-						close();
-					}
-				}
-			}
-		}).start();
+		packetSender.queuePacket(packet);
 	}
 
 	private void reestablishConnection() throws IOException {
 		this.socket = new Socket();
-		socket.connect(new InetSocketAddress(serverAdress, port), 3000);
+		socket.connect(new InetSocketAddress(serverAdress, testPort), 3000);
 		try {
 			input = new DataInputStream(socket.getInputStream());
 			output = new DataOutputStream(socket.getOutputStream());
@@ -144,7 +112,7 @@ public class ServerConnection {
 		}
 	}
 
-	private void authPlayer() {
+	private boolean authPlayer() {
 		Session session = mc.getSession();
 		String token = session.getToken();
 		String uuidWithoutDash = session.getPlayerID();
@@ -153,12 +121,10 @@ public class ServerConnection {
 					ConnectionUtils.generateKeyHash(uuidWithoutDash, sharedSecret, serverPubKey.getEncoded()), logger);
 		} catch (IOException e) {
 			logger.error("Failed to auth against yggdrassil", e);
+			return false;
 		}
-		JSONObject playerInfoJson = new JSONObject();
-		playerInfoJson.put("name", session.getUsername());
-		playerInfoJson.put("uuid", uuidWithoutDash);
-		playerInfoJson.put("tag", tag);
-		sendMessage(playerInfoJson);
+		sendMessage(new AuthPlayerPacket(session.getUsername(), uuidWithoutDash, tag));
+		return true;
 	}
 
 	private void figureOutEncryption() {
@@ -209,11 +175,16 @@ public class ServerConnection {
 	private void close() {
 		closed = true;
 		try {
+			if (packetHandler != null) {
+				packetHandler.stopHandling();
+			}
+			if (packetSender != null) {
+				packetSender.stop();
+			}
 			socket.close();
 		} catch (IOException e) {
 			// its fine
 		}
 		WPClientForgeMod.getInstance().reconnect();
 	}
-
 }

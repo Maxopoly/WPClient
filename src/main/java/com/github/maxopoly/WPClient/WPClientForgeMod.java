@@ -1,7 +1,9 @@
 package com.github.maxopoly.WPClient;
 
 import com.github.maxopoly.WPClient.connection.ServerConnection;
+import com.github.maxopoly.WPClient.journeyMap.MapDataSyncSession;
 import com.github.maxopoly.WPClient.listener.ChestContentListener;
+import com.github.maxopoly.WPClient.listener.IngameGUIListener;
 import com.github.maxopoly.WPClient.listener.JEI_GUI_Listener;
 import com.github.maxopoly.WPClient.listener.MainMenuGUIListener;
 import com.github.maxopoly.WPClient.listener.PlayerProximityListener;
@@ -66,6 +68,9 @@ public class WPClientForgeMod {
 		MinecraftForge.EVENT_BUS.register(new ChestContentListener());
 		MinecraftForge.EVENT_BUS.register(new MainMenuGUIListener());
 		MinecraftForge.EVENT_BUS.register(new PlayerProximityListener());
+		MinecraftForge.EVENT_BUS.register(new IngameGUIListener());
+
+		MapDataSyncSession.replaceColorPalette();
 		sessionManager = new SessionManager(mc, logger);
 		connection = new ServerConnection(mc, logger);
 		new Thread(new Runnable() {
@@ -82,7 +87,7 @@ public class WPClientForgeMod {
 			public void run() {
 				sendPlayerLocations();
 			}
-		}, 5, 500, TimeUnit.MILLISECONDS);
+		}, 500, 500, TimeUnit.MILLISECONDS);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -98,7 +103,12 @@ public class WPClientForgeMod {
 		}
 	}
 
-	public void reconnect() {
+	public synchronized void reconnect() {
+		if (connection == null) {
+			// ensures we only reconnect once
+			return;
+		}
+		connection = null;
 		logger.info("Disconnected from server. Attempting to reconnect in 10 seconds");
 		try {
 			Thread.sleep(10000);
@@ -120,8 +130,18 @@ public class WPClientForgeMod {
 		return enabled;
 	}
 
+	/**
+	 * @return Whether the player is connected to both civclassics and the wp server
+	 */
 	public boolean isConnectionReady() {
-		return isEnabled() && connection != null && connection.isInitialized() && !connection.isClosed();
+		return isEnabled() && connectedToWPServer();
+	}
+
+	/**
+	 * @return Whether the player is connected to the WP server
+	 */
+	public boolean connectedToWPServer() {
+		return connection != null && connection.isInitialized() && !connection.isClosed();
 	}
 
 	private void sendPlayerLocations() {
@@ -138,7 +158,7 @@ public class WPClientForgeMod {
 			players.add(tracker.getLastKnownLocation(player));
 		}
 		PlayerLocationPacket updatePacket = new PlayerLocationPacket(players);
-		connection.sendMessage(updatePacket.getMessage());
+		connection.sendMessage(updatePacket);
 	}
 
 }

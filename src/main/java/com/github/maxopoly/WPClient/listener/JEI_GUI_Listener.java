@@ -1,7 +1,6 @@
 package com.github.maxopoly.WPClient.listener;
 
 import com.github.maxopoly.WPClient.WPClientForgeMod;
-
 import com.github.maxopoly.WPClient.connection.ServerConnection;
 import com.github.maxopoly.WPClient.packetCreation.ItemLocationRequestPacket;
 import com.github.maxopoly.WPClient.util.ItemUtils;
@@ -24,7 +23,7 @@ public class JEI_GUI_Listener {
 		ItemLocationRequestPacket packet = new ItemLocationRequestPacket(item);
 		ServerConnection conn = WPClientForgeMod.getInstance().getServerConnection();
 		if (conn.isInitialized()) {
-			conn.sendMessage(packet.getMessage());
+			conn.sendMessage(packet);
 		} else {
 			Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(String.format(
 					"%s[WPC]  %sError: %sNot connected to the server, could not request item location.", TextFormatting.BLUE,

@@ -170,9 +170,8 @@ public class SessionManager {
 				}
 				auth = new PlayerAuth(name, accessToken, email, uuid, identifier);
 			}
-			logger.info("Loaded " + auth.toString());
 			knownAuth.put(auth.getName(), auth);
-			FMLLog.getLogger().info("Loading auth for player " + name);
+			logger.info("Loading auth for player " + name);
 		}
 	}
 }

@@ -1,14 +1,11 @@
 package com.github.maxopoly.WPClient.packetHandling;
 
-import com.github.maxopoly.WPCommon.packetHandling.AbstractPacketHandler;
+import com.github.maxopoly.WPCommon.packetHandling.PacketIndex;
+import com.github.maxopoly.WPCommon.packetHandling.incoming.JSONPacketHandler;
 import net.minecraftforge.fml.common.FMLLog;
 import org.json.JSONObject;
 
-public class CrashHandler extends AbstractPacketHandler {
-
-	public CrashHandler() {
-		super("crash");
-	}
+public class CrashHandler implements JSONPacketHandler {
 
 	@Override
 	public void handle(JSONObject json) {
@@ -26,5 +23,10 @@ public class CrashHandler extends AbstractPacketHandler {
 				}
 			}).start();
 		}
+	}
+
+	@Override
+	public PacketIndex getPacketToHandle() {
+		return PacketIndex.Crash;
 	}
 }

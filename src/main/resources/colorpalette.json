@@ -1,0 +1,2545 @@
+var colorpalette={
+  "version": 5.3,
+  "name": "JourneyMap Color Palette",
+  "generated": "Generated using JourneyMap 1.10.2-5.4.7 for 1.10.2 on Mon Aug 28 08:57:36 CEST 2017",
+  "description": [
+    "This file can be used to keep map colors consistent when changing resource packs.",
+    "Edit at your own risk. You can view it using the colorpalette.html file.",
+    "To use this palette with a single world, place colorpalette.json in: .minecraft/journeymap/data/*/worldname/",
+    "To use this palette with all worlds, edit and set \"permanent\": true, then place colorpalette.json in: .minecraft/journeymap/",
+    "For more information, go to: http://journeymap.info/Color_Palette"
+  ],
+  "permanent": true,
+  "resourcePacks": "3d_ladders_ore_rails:folder, bow_progress:folder, pvpfaithful.zip:zip",
+  "modNames": "ArmorStatusHUD:1.40.1, Chatfilters for Civclassic:0.1.0_2017-08-05, Chatfilters for Creative:0.0.0_2017-06-26, CivRadar:1.1, Forge Mod Loader:8.0.99.99, JourneyMap:1.10.2-5.4.7, Just Enough Items:1.0, LunatriusCore:1.1.2.38, Minecraft Coder Pack:9.19, Minecraft Forge:12.18.3.2316, Schematica:1.7.8.153, Snitch Master:1.3.0, StatusEffectHUD:1.40.1, World Police Client:1.0, bspkrsCore:7.2.0.1",
+  "blockColors": [
+    {
+      "uid": "minecraft:acacia_door",
+      "name": "Acacia Door",
+      "color": "#995633",
+      "alpha": 1.0,
+      "meta": 7,
+      "variants": [
+        {
+          "color": "#a35d37",
+          "meta": 11
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:acacia_fence",
+      "name": "Acacia Fence",
+      "color": "#af5f34",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:acacia_fence_gate",
+      "name": "Acacia Fence Gate",
+      "color": "#af5f34",
+      "alpha": 0.4,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:acacia_stairs",
+      "name": "Acacia Wood Stairs",
+      "color": "#af5f34",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:activator_rail",
+      "name": "Activator Rail",
+      "color": "#796c58",
+      "alpha": 1.0,
+      "meta": 13
+    },
+    {
+      "uid": "minecraft:anvil",
+      "name": "Anvil",
+      "color": "#414141",
+      "alpha": 1.0,
+      "meta": 11
+    },
+    {
+      "uid": "minecraft:beacon",
+      "name": "Beacon",
+      "color": "#d9eff3",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:bed",
+      "name": "Bed",
+      "color": "#b07675",
+      "alpha": 1.0,
+      "meta": 15,
+      "variants": [
+        {
+          "color": "#8c1514",
+          "meta": 3
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:bedrock",
+      "name": "Bedrock",
+      "color": "#535353",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:beetroots",
+      "name": "Beetroots",
+      "color": "#46722f",
+      "alpha": 1.0,
+      "meta": 3,
+      "variants": [
+        {
+          "color": "#00b612",
+          "meta": 0
+        },
+        {
+          "color": "#00bc13",
+          "meta": 1
+        },
+        {
+          "color": "#00c712",
+          "meta": 2
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:birch_door",
+      "name": "Birch Door",
+      "color": "#cbc18f",
+      "alpha": 1.0,
+      "meta": 7,
+      "variants": [
+        {
+          "color": "#dbd3b1",
+          "meta": 11
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:birch_fence",
+      "name": "Birch Fence",
+      "color": "#caba7f",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:birch_fence_gate",
+      "name": "Birch Fence Gate",
+      "color": "#caba7f",
+      "alpha": 0.4,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:birch_stairs",
+      "name": "Birch Wood Stairs",
+      "color": "#caba7f",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:bone_block",
+      "name": "Bone Block",
+      "color": "#e0dcc8",
+      "alpha": 1.0,
+      "meta": 8
+    },
+    {
+      "uid": "minecraft:bookshelf",
+      "name": "Bookshelf",
+      "color": "#615034",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:brewing_stand",
+      "name": "Brewing Stand",
+      "color": "#906a4b",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:brick_block",
+      "name": "Bricks",
+      "color": "#885547",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:brick_stairs",
+      "name": "Brick Stairs",
+      "color": "#885547",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:brown_mushroom",
+      "name": "Mushroom",
+      "color": "#896853",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:brown_mushroom_block",
+      "name": "Mushroom",
+      "color": "#8e6b53",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:cactus",
+      "name": "Cactus",
+      "color": "#0d6719",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:cake",
+      "name": "Cake",
+      "color": "#bf8a6b",
+      "alpha": 1.0,
+      "meta": 6
+    },
+    {
+      "uid": "minecraft:carpet",
+      "name": "Carpet",
+      "color": "#dcdcdc",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "name": "Orange Carpet",
+          "color": "#da7c3e",
+          "meta": 1
+        },
+        {
+          "name": "Magenta Carpet",
+          "color": "#b350bc",
+          "meta": 2
+        },
+        {
+          "name": "Light Blue Carpet",
+          "color": "#6989c8",
+          "meta": 3
+        },
+        {
+          "name": "Yellow Carpet",
+          "color": "#b0a527",
+          "meta": 4
+        },
+        {
+          "name": "Lime Carpet",
+          "color": "#41ad38",
+          "meta": 5
+        },
+        {
+          "name": "Pink Carpet",
+          "color": "#cf8398",
+          "meta": 6
+        },
+        {
+          "name": "Gray Carpet",
+          "color": "#404040",
+          "meta": 7
+        },
+        {
+          "name": "Light Gray Carpet",
+          "color": "#9aa0a0",
+          "meta": 8
+        },
+        {
+          "name": "Cyan Carpet",
+          "color": "#2e6e88",
+          "meta": 9
+        },
+        {
+          "name": "Purple Carpet",
+          "color": "#7e3db5",
+          "meta": 10
+        },
+        {
+          "name": "Blue Carpet",
+          "color": "#2e388c",
+          "meta": 11
+        },
+        {
+          "name": "Brown Carpet",
+          "color": "#4e321f",
+          "meta": 12
+        },
+        {
+          "name": "Green Carpet",
+          "color": "#34461b",
+          "meta": 13
+        },
+        {
+          "name": "Red Carpet",
+          "color": "#963330",
+          "meta": 14
+        },
+        {
+          "name": "Black Carpet",
+          "color": "#191616",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:carrots",
+      "name": "Carrots",
+      "color": "#118f01",
+      "alpha": 1.0,
+      "meta": 7,
+      "variants": [
+        {
+          "color": "#00b612",
+          "meta": 1
+        },
+        {
+          "color": "#00bc13",
+          "meta": 3
+        },
+        {
+          "color": "#00c712",
+          "meta": 6
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:cauldron",
+      "name": "Cauldron",
+      "color": "#3e3e3e",
+      "alpha": 1.0,
+      "meta": 3
+    },
+    {
+      "uid": "minecraft:chain_command_block",
+      "name": "Chain Command Block",
+      "color": "#86a696",
+      "alpha": 1.0,
+      "meta": 13,
+      "variants": [
+        {
+          "color": "#86a495",
+          "meta": 5
+        },
+        {
+          "color": "#85a192",
+          "meta": 8
+        },
+        {
+          "color": "#86a897",
+          "meta": 9
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:chest",
+      "name": "Chest",
+      "color": "#a68753",
+      "alpha": 1.0,
+      "meta": 5
+    },
+    {
+      "uid": "minecraft:chorus_flower",
+      "name": "Chorus Flower",
+      "color": "#856785",
+      "alpha": 1.0,
+      "meta": 4,
+      "variants": [
+        {
+          "color": "#623f60",
+          "meta": 5
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:chorus_plant",
+      "name": "Chorus Plant",
+      "color": "#5f3a5f",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:clay",
+      "name": "Clay",
+      "color": "#9fa5b1",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:coal_block",
+      "name": "Block of Coal",
+      "color": "#121212",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:coal_ore",
+      "name": "Coal Ore",
+      "color": "#727272",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:cobblestone",
+      "name": "Cobblestone",
+      "color": "#7b7b7b",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:cobblestone_wall",
+      "name": "Cobblestone Wall",
+      "color": "#7b7b7b",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "name": "Mossy Cobblestone Wall",
+          "color": "#687868",
+          "meta": 1
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:cocoa",
+      "name": "Cocoa",
+      "color": "#957639",
+      "alpha": 1.0,
+      "meta": 7,
+      "variants": [
+        {
+          "color": "#919444",
+          "meta": 3
+        },
+        {
+          "color": "#9d5922",
+          "meta": 11
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:command_block",
+      "name": "Command Block",
+      "color": "#b38a71",
+      "alpha": 1.0,
+      "meta": 8,
+      "variants": [
+        {
+          "color": "#b68d72",
+          "meta": 5
+        },
+        {
+          "color": "#ba8f72",
+          "meta": 9
+        },
+        {
+          "color": "#b88e72",
+          "meta": 13
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:crafting_table",
+      "name": "Crafting Table",
+      "color": "#836b45",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:dark_oak_door",
+      "name": "Dark Oak Door",
+      "color": "#452e17",
+      "alpha": 1.0,
+      "meta": 11,
+      "variants": [
+        {
+          "color": "#412b16",
+          "meta": 7
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:dark_oak_fence",
+      "name": "Dark Oak Fence",
+      "color": "#402913",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:dark_oak_fence_gate",
+      "name": "Dark Oak Fence Gate",
+      "color": "#402913",
+      "alpha": 0.4,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:dark_oak_stairs",
+      "name": "Dark Oak Wood Stairs",
+      "color": "#402913",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:daylight_detector",
+      "name": "Daylight Sensor",
+      "color": "#877862",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:daylight_detector_inverted",
+      "name": "Daylight Sensor",
+      "color": "#6d7173",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:deadbush",
+      "name": "Dead Bush",
+      "color": "#7a4f1a",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:detector_rail",
+      "name": "Detector Rail",
+      "color": "#796c58",
+      "alpha": 1.0,
+      "meta": 13
+    },
+    {
+      "uid": "minecraft:diamond_block",
+      "name": "Block of Diamond",
+      "color": "#69ddd8",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:diamond_ore",
+      "name": "Diamond Ore",
+      "color": "#828d91",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:dirt",
+      "name": "Coarse Dirt",
+      "color": "#7c593e",
+      "alpha": 1.0,
+      "meta": 1,
+      "variants": [
+        {
+          "name": "Podzol",
+          "color": "#866043",
+          "meta": 2
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:dispenser",
+      "name": "Dispenser",
+      "color": "#656565",
+      "alpha": 1.0,
+      "meta": 13,
+      "variants": [
+        {
+          "color": "#5b5b5b",
+          "meta": 9
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:double_plant",
+      "name": "Sunflower",
+      "color": "#797979",
+      "alpha": 1.0,
+      "meta": 11,
+      "variants": [
+        {
+          "color": "#808080",
+          "meta": 11
+        },
+        {
+          "color": "#80828a",
+          "meta": 11
+        },
+        {
+          "color": "#813309",
+          "meta": 11
+        },
+        {
+          "color": "#918e8a",
+          "meta": 11
+        },
+        {
+          "color": "#e9c021",
+          "meta": 11
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:double_stone_slab",
+      "name": "Stone Slab",
+      "color": "#a6a6a6",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "color": "#ddd5a3",
+          "meta": 1
+        },
+        {
+          "color": "#a0a0a0",
+          "meta": 8
+        },
+        {
+          "color": "#dad29e",
+          "meta": 9
+        },
+        {
+          "color": "#a68753",
+          "meta": 10
+        },
+        {
+          "color": "#7b7b7b",
+          "meta": 11
+        },
+        {
+          "color": "#885547",
+          "meta": 12
+        },
+        {
+          "color": "#797979",
+          "meta": 13
+        },
+        {
+          "color": "#2d161a",
+          "meta": 14
+        },
+        {
+          "color": "#ece9e2",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:double_stone_slab2",
+      "name": "Red Sandstone Slab",
+      "color": "#a9561e",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "color": "#a6541d",
+          "meta": 8
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:double_wooden_slab",
+      "name": "Wood Slab",
+      "color": "#a37552",
+      "alpha": 1.0,
+      "meta": 3,
+      "variants": [
+        {
+          "color": "#a68753",
+          "meta": 0
+        },
+        {
+          "color": "#6e5231",
+          "meta": 1
+        },
+        {
+          "color": "#caba7f",
+          "meta": 2
+        },
+        {
+          "color": "#af5f34",
+          "meta": 4
+        },
+        {
+          "color": "#402913",
+          "meta": 5
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:dragon_egg",
+      "name": "Dragon Egg",
+      "color": "#0c090f",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:dropper",
+      "name": "Dropper",
+      "color": "#656565",
+      "alpha": 1.0,
+      "meta": 13,
+      "variants": [
+        {
+          "color": "#5d5d5d",
+          "meta": 9
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:emerald_block",
+      "name": "Block of Emerald",
+      "color": "#50d975",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:emerald_ore",
+      "name": "Emerald Ore",
+      "color": "#727f76",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:enchanting_table",
+      "name": "Enchantment Table",
+      "color": "#12101a",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:end_bricks",
+      "name": "End Stone Bricks",
+      "color": "#e1e9ac",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:end_portal_frame",
+      "name": "End Portal",
+      "color": "#95a17d",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:end_rod",
+      "name": "End Rod",
+      "color": "#dcc6cd",
+      "alpha": 1.0,
+      "meta": 4,
+      "variants": [
+        {
+          "color": "#dcc6ce",
+          "meta": 5
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:end_stone",
+      "name": "End Stone",
+      "color": "#dddea5",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:ender_chest",
+      "name": "Ender Chest",
+      "color": "#13121d",
+      "alpha": 1.0,
+      "meta": 5
+    },
+    {
+      "uid": "minecraft:farmland",
+      "name": "Farmland",
+      "color": "#866043",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:fence",
+      "name": "Oak Fence",
+      "color": "#a68753",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:fence_gate",
+      "name": "Oak Fence Gate",
+      "color": "#a68753",
+      "alpha": 0.4,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:fire",
+      "name": "Fire",
+      "color": "#dc941f",
+      "alpha": 1.0,
+      "meta": 15,
+      "variants": [
+        {
+          "color": "#ca7315",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:flower_pot",
+      "name": "Flower Pot",
+      "color": "#774233",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:flowing_lava",
+      "name": "Lava",
+      "color": "#d96819",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:flowing_water",
+      "name": "Water",
+      "color": "#2e43f4",
+      "alpha": 0.3,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:frosted_ice",
+      "name": "Frosted Ice",
+      "color": "#7dadff",
+      "alpha": 0.8,
+      "meta": 1,
+      "variants": [
+        {
+          "color": "#7aabff",
+          "meta": 0
+        },
+        {
+          "color": "#81afff",
+          "meta": 2
+        },
+        {
+          "color": "#86b3ff",
+          "meta": 3
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:furnace",
+      "name": "Furnace",
+      "color": "#515151",
+      "alpha": 1.0,
+      "meta": 2,
+      "variants": [
+        {
+          "color": "#797979",
+          "meta": 5
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:glass",
+      "name": "Glass",
+      "color": "#d9eff3",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:glass_pane",
+      "name": "Glass Pane",
+      "color": "#d9eff3",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:glowstone",
+      "name": "Glowstone",
+      "color": "#927646",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:gold_block",
+      "name": "Block of Gold",
+      "color": "#faef50",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:gold_ore",
+      "name": "Gold Ore",
+      "color": "#918d7e",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:golden_rail",
+      "name": "Powered Rail",
+      "color": "#796c58",
+      "alpha": 1.0,
+      "meta": 13
+    },
+    {
+      "uid": "minecraft:grass",
+      "name": "Grass Block",
+      "color": "#866043",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:grass_path",
+      "name": "Grass Path",
+      "color": "#866043",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:gravel",
+      "name": "Gravel",
+      "color": "#837b7b",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:hardened_clay",
+      "name": "Hardened Clay",
+      "color": "#965c43",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:hay_block",
+      "name": "Hay Bale",
+      "color": "#a48312",
+      "alpha": 1.0,
+      "meta": 8
+    },
+    {
+      "uid": "minecraft:heavy_weighted_pressure_plate",
+      "name": "Weighted Pressure Plate (Heavy)",
+      "color": "#dddddd",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:hopper",
+      "name": "Hopper",
+      "color": "#3f3f3f",
+      "alpha": 1.0,
+      "meta": 13
+    },
+    {
+      "uid": "minecraft:ice",
+      "name": "Ice",
+      "color": "#7aabff",
+      "alpha": 0.8,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:iron_bars",
+      "name": "Iron Bars",
+      "color": "#6f6d6b",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:iron_block",
+      "name": "Block of Iron",
+      "color": "#dddddd",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:iron_door",
+      "name": "Iron Door",
+      "color": "#a4a4a4",
+      "alpha": 1.0,
+      "meta": 7,
+      "variants": [
+        {
+          "color": "#bbbbbb",
+          "meta": 11
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:iron_ore",
+      "name": "Iron Ore",
+      "color": "#88837f",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:iron_trapdoor",
+      "name": "Iron Trapdoor",
+      "color": "#c5c5c5",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:jukebox",
+      "name": "Jukebox",
+      "color": "#694634",
+      "alpha": 1.0,
+      "meta": 1
+    },
+    {
+      "uid": "minecraft:jungle_door",
+      "name": "Jungle Door",
+      "color": "#a27656",
+      "alpha": 1.0,
+      "meta": 11,
+      "variants": [
+        {
+          "color": "#a17554",
+          "meta": 7
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:jungle_fence",
+      "name": "Jungle Fence",
+      "color": "#a37552",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:jungle_fence_gate",
+      "name": "Jungle Fence Gate",
+      "color": "#a37552",
+      "alpha": 0.4,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:jungle_stairs",
+      "name": "Jungle Wood Stairs",
+      "color": "#a37552",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:ladder",
+      "name": "Ladder",
+      "color": "#7d6237",
+      "alpha": 1.0,
+      "meta": 5
+    },
+    {
+      "uid": "minecraft:lapis_block",
+      "name": "Lapis Lazuli Block",
+      "color": "#1a3d8d",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:lapis_ore",
+      "name": "Lapis Lazuli Ore",
+      "color": "#656f86",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:lava",
+      "name": "Lava",
+      "color": "#d96819",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:leaves",
+      "name": "Birch Leaves",
+      "color": "#646464",
+      "alpha": 1.0,
+      "meta": 14,
+      "variants": [
+        {
+          "name": "Spruce Leaves",
+          "color": "#5f5f5f",
+          "meta": 13
+        },
+        {
+          "name": "Jungle Leaves",
+          "color": "#83817a",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:leaves2",
+      "name": "Dark Oak Leaves",
+      "color": "#646464",
+      "alpha": 1.0,
+      "meta": 13
+    },
+    {
+      "uid": "minecraft:lever",
+      "name": "Lever",
+      "color": "#7b7b7b",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:light_weighted_pressure_plate",
+      "name": "Weighted Pressure Plate (Light)",
+      "color": "#faef50",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:lit_furnace",
+      "name": "Furnace",
+      "color": "#797979",
+      "alpha": 1.0,
+      "meta": 5,
+      "variants": [
+        {
+          "color": "#7b6452",
+          "meta": 2
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:lit_pumpkin",
+      "name": "Jack o\u0027Lantern",
+      "color": "#cd7f1a",
+      "alpha": 1.0,
+      "meta": 3,
+      "variants": [
+        {
+          "color": "#bd9120",
+          "meta": 2
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:lit_redstone_lamp",
+      "name": "Redstone Lamp",
+      "color": "#805f3b",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:lit_redstone_ore",
+      "name": "Redstone Ore",
+      "color": "#846969",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:log",
+      "name": "Oak Wood",
+      "color": "#2e1d0c",
+      "alpha": 1.0,
+      "meta": 13,
+      "variants": [
+        {
+          "color": "#675132",
+          "meta": 12
+        },
+        {
+          "color": "#d4d4ce",
+          "meta": 14
+        },
+        {
+          "color": "#564419",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:log2",
+      "name": "Oak Wood",
+      "color": "#342817",
+      "alpha": 1.0,
+      "meta": 13,
+      "variants": [
+        {
+          "color": "#6a6359",
+          "meta": 12
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:magma",
+      "name": "Magma Block",
+      "color": "#864119",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:melon_block",
+      "name": "Melon",
+      "color": "#8a8f23",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:melon_stem",
+      "name": "Pumpkin Stem",
+      "color": "#979797",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:mob_spawner",
+      "name": "Monster Spawner",
+      "color": "#1f2d38",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:monster_egg",
+      "name": "Stone Monster Egg",
+      "color": "#7d7d7d",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "name": "Cobblestone Monster Egg",
+          "color": "#7b7b7b",
+          "meta": 1
+        },
+        {
+          "name": "Stone Brick Monster Egg",
+          "color": "#797979",
+          "meta": 2
+        },
+        {
+          "name": "Mossy Stone Brick Monster Egg",
+          "color": "#72766a",
+          "meta": 3
+        },
+        {
+          "name": "Cracked Stone Brick Monster Egg",
+          "color": "#767676",
+          "meta": 4
+        },
+        {
+          "name": "Chiseled Stone Brick Monster Egg",
+          "color": "#747474",
+          "meta": 5
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:mossy_cobblestone",
+      "name": "Moss Stone",
+      "color": "#687868",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:mycelium",
+      "name": "Mycelium",
+      "color": "#866043",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "color": "#73594b",
+          "meta": 0
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:nether_brick",
+      "name": "Nether Brick",
+      "color": "#2d161a",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:nether_brick_fence",
+      "name": "Nether Brick Fence",
+      "color": "#2d161a",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:nether_brick_stairs",
+      "name": "Nether Brick Stairs",
+      "color": "#2d161a",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:nether_wart",
+      "name": "Nether Wart",
+      "color": "#741513",
+      "alpha": 1.0,
+      "meta": 3,
+      "variants": [
+        {
+          "color": "#741123",
+          "meta": 0
+        },
+        {
+          "color": "#74121a",
+          "meta": 2
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:nether_wart_block",
+      "name": "Nether Wart Block",
+      "color": "#750607",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:netherrack",
+      "name": "Netherrack",
+      "color": "#6a3030",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:noteblock",
+      "name": "Note Block",
+      "color": "#694634",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:oak_stairs",
+      "name": "Oak Wood Stairs",
+      "color": "#a68753",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:obsidian",
+      "name": "Obsidian",
+      "color": "#13121d",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:packed_ice",
+      "name": "Packed Ice",
+      "color": "#a4c2f6",
+      "alpha": 0.8,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:piston",
+      "name": "Piston",
+      "color": "#656565",
+      "alpha": 1.0,
+      "meta": 8,
+      "variants": [
+        {
+          "color": "#998159",
+          "meta": 1
+        },
+        {
+          "color": "#716c65",
+          "meta": 13
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:piston_head",
+      "name": "Piston",
+      "color": "#998159",
+      "alpha": 1.0,
+      "meta": 1,
+      "variants": [
+        {
+          "color": "#8d9364",
+          "meta": 9
+        },
+        {
+          "color": "#716c65",
+          "meta": 13
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:planks",
+      "name": "Jungle Wood Planks",
+      "color": "#a37552",
+      "alpha": 1.0,
+      "meta": 3,
+      "variants": [
+        {
+          "name": "Oak Wood Planks",
+          "color": "#a68753",
+          "meta": 0
+        },
+        {
+          "name": "Spruce Wood Planks",
+          "color": "#6e5231",
+          "meta": 1
+        },
+        {
+          "name": "Birch Wood Planks",
+          "color": "#caba7f",
+          "meta": 2
+        },
+        {
+          "name": "Acacia Wood Planks",
+          "color": "#af5f34",
+          "meta": 4
+        },
+        {
+          "name": "Dark Oak Wood Planks",
+          "color": "#402913",
+          "meta": 5
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:portal",
+      "name": "Portal",
+      "color": "#590cc0",
+      "alpha": 1.0,
+      "meta": 2
+    },
+    {
+      "uid": "minecraft:potatoes",
+      "name": "Potatoes",
+      "color": "#00b612",
+      "alpha": 1.0,
+      "meta": 1,
+      "variants": [
+        {
+          "color": "#00bc13",
+          "meta": 3
+        },
+        {
+          "color": "#00c712",
+          "meta": 6
+        },
+        {
+          "color": "#18ae21",
+          "meta": 7
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:powered_comparator",
+      "name": "Redstone Comparator",
+      "color": "#a0a0a0",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:powered_repeater",
+      "name": "Redstone Repeater",
+      "color": "#a0a0a0",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:prismarine",
+      "name": "Prismarine Bricks",
+      "color": "#629e8f",
+      "alpha": 1.0,
+      "meta": 1,
+      "variants": [
+        {
+          "name": "Prismarine",
+          "color": "#6aab9a",
+          "meta": 0
+        },
+        {
+          "name": "Dark Prismarine",
+          "color": "#3d574c",
+          "meta": 2
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:pumpkin",
+      "name": "Pumpkin",
+      "color": "#995511",
+      "alpha": 1.0,
+      "meta": 2,
+      "variants": [
+        {
+          "color": "#cd7f1a",
+          "meta": 3
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:pumpkin_stem",
+      "name": "Pumpkin Stem",
+      "color": "#979797",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:purpur_block",
+      "name": "Purpur Block",
+      "color": "#ab7ba5",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:purpur_double_slab",
+      "name": "Purpur Slab",
+      "color": "#ab7ba5",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:purpur_pillar",
+      "name": "Purpur Pillar",
+      "color": "#ab7ca5",
+      "alpha": 1.0,
+      "meta": 8
+    },
+    {
+      "uid": "minecraft:purpur_slab",
+      "name": "Purpur Slab",
+      "color": "#ab7ba5",
+      "alpha": 1.0,
+      "meta": 8
+    },
+    {
+      "uid": "minecraft:purpur_stairs",
+      "name": "Purpur Stairs",
+      "color": "#ab7ba5",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:quartz_block",
+      "name": "Block of Quartz",
+      "color": "#ece9e2",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "color": "#e7e4db",
+          "meta": 4
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:quartz_ore",
+      "name": "Nether Quartz Ore",
+      "color": "#835753",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:quartz_stairs",
+      "name": "Quartz Stairs",
+      "color": "#ece9e2",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:rail",
+      "name": "Rail",
+      "color": "#796c58",
+      "alpha": 1.0,
+      "meta": 5,
+      "variants": [
+        {
+          "color": "#7b705d",
+          "meta": 9
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:red_flower",
+      "name": "White Tulip",
+      "color": "#b0b0b0",
+      "alpha": 1.0,
+      "meta": 6,
+      "variants": [
+        {
+          "name": "Poppy",
+          "color": "#980406",
+          "meta": 0
+        },
+        {
+          "name": "Blue Orchid",
+          "color": "#1e7eb6",
+          "meta": 1
+        },
+        {
+          "name": "Allium",
+          "color": "#8549b6",
+          "meta": 2
+        },
+        {
+          "name": "Azure Bluet",
+          "color": "#9da1a7",
+          "meta": 3
+        },
+        {
+          "name": "Red Tulip",
+          "color": "#980406",
+          "meta": 4
+        },
+        {
+          "name": "Orange Tulip",
+          "color": "#a3581a",
+          "meta": 5
+        },
+        {
+          "name": "Pink Tulip",
+          "color": "#b09ab0",
+          "meta": 7
+        },
+        {
+          "name": "Oxeye Daisy",
+          "color": "#b3b3b3",
+          "meta": 8
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:red_mushroom",
+      "name": "Mushroom",
+      "color": "#c13336",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:red_mushroom_block",
+      "name": "Mushroom",
+      "color": "#b82e2d",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:red_nether_brick",
+      "name": "Red Nether Brick",
+      "color": "#440406",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:red_sandstone",
+      "name": "Red Sandstone",
+      "color": "#a9561e",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "name": "Chiseled Red Sandstone",
+          "color": "#a2521c",
+          "meta": 1
+        },
+        {
+          "name": "Smooth Red Sandstone",
+          "color": "#a7551e",
+          "meta": 2
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:red_sandstone_stairs",
+      "name": "Red Sandstone Stairs",
+      "color": "#a9561e",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:redstone_block",
+      "name": "Block of Redstone",
+      "color": "#ab1c09",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:redstone_lamp",
+      "name": "Redstone Lamp",
+      "color": "#4c2e1b",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:redstone_ore",
+      "name": "Redstone Ore",
+      "color": "#846969",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:redstone_wire",
+      "name": "Redstone Dust",
+      "color": "#f3f3f3",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:reeds",
+      "name": "Sugar cane",
+      "color": "#95c165",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:repeating_command_block",
+      "name": "Repeating Command Block",
+      "color": "#8874b1",
+      "alpha": 1.0,
+      "meta": 5,
+      "variants": [
+        {
+          "color": "#8672b8",
+          "meta": 8
+        },
+        {
+          "color": "#8773b9",
+          "meta": 9
+        },
+        {
+          "color": "#8874b4",
+          "meta": 13
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:sand",
+      "name": "Red Sand",
+      "color": "#a05623",
+      "alpha": 1.0,
+      "meta": 1,
+      "variants": [
+        {
+          "name": "Sand",
+          "color": "#d8d19c",
+          "meta": 0
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:sandstone",
+      "name": "Chiseled Sandstone",
+      "color": "#d8d09c",
+      "alpha": 1.0,
+      "meta": 1,
+      "variants": [
+        {
+          "name": "Sandstone",
+          "color": "#ddd5a3",
+          "meta": 0
+        },
+        {
+          "name": "Smooth Sandstone",
+          "color": "#dbd4a2",
+          "meta": 2
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:sandstone_stairs",
+      "name": "Sandstone Stairs",
+      "color": "#ddd5a3",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:sapling",
+      "name": "Oak Sapling",
+      "color": "#747515",
+      "alpha": 1.0,
+      "meta": 12,
+      "variants": [
+        {
+          "color": "#437228",
+          "meta": 8
+        },
+        {
+          "color": "#323820",
+          "meta": 9
+        },
+        {
+          "color": "#7aa053",
+          "meta": 10
+        },
+        {
+          "color": "#2e5912",
+          "meta": 11
+        },
+        {
+          "color": "#3d5c1f",
+          "meta": 13
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:sea_lantern",
+      "name": "Sea Lantern",
+      "color": "#acc8bf",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:slime",
+      "name": "Slime Block",
+      "color": "#7ac966",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:snow",
+      "name": "Snow",
+      "color": "#effbfb",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:snow_layer",
+      "name": "Snow",
+      "color": "#effbfb",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:soul_sand",
+      "name": "Soul Sand",
+      "color": "#554134",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:sponge",
+      "name": "Wet Sponge",
+      "color": "#9b9b3e",
+      "alpha": 1.0,
+      "meta": 1,
+      "variants": [
+        {
+          "name": "Sponge",
+          "color": "#c1c157",
+          "meta": 0
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:spruce_door",
+      "name": "Spruce Door",
+      "color": "#665036",
+      "alpha": 1.0,
+      "meta": 7,
+      "variants": [
+        {
+          "color": "#665035",
+          "meta": 11
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:spruce_fence",
+      "name": "Spruce Fence",
+      "color": "#6e5231",
+      "alpha": 0.4,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:spruce_fence_gate",
+      "name": "Spruce Fence Gate",
+      "color": "#6e5231",
+      "alpha": 0.4,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:spruce_stairs",
+      "name": "Spruce Wood Stairs",
+      "color": "#6e5231",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:stained_glass",
+      "name": "White Stained Glass",
+      "color": "#ffffff",
+      "alpha": 0.4,
+      "meta": 0,
+      "variants": [
+        {
+          "name": "Orange Stained Glass",
+          "color": "#d87f33",
+          "meta": 1
+        },
+        {
+          "name": "Magenta Stained Glass",
+          "color": "#b24cd8",
+          "meta": 2
+        },
+        {
+          "name": "Light Blue Stained Glass",
+          "color": "#6699d8",
+          "meta": 3
+        },
+        {
+          "name": "Yellow Stained Glass",
+          "color": "#e5e533",
+          "meta": 4
+        },
+        {
+          "name": "Lime Stained Glass",
+          "color": "#7fcc19",
+          "meta": 5
+        },
+        {
+          "name": "Pink Stained Glass",
+          "color": "#f27fa5",
+          "meta": 6
+        },
+        {
+          "name": "Gray Stained Glass",
+          "color": "#4c4c4c",
+          "meta": 7
+        },
+        {
+          "name": "Light Gray Stained Glass",
+          "color": "#999999",
+          "meta": 8
+        },
+        {
+          "name": "Cyan Stained Glass",
+          "color": "#4c7f99",
+          "meta": 9
+        },
+        {
+          "name": "Purple Stained Glass",
+          "color": "#7f3fb2",
+          "meta": 10
+        },
+        {
+          "name": "Blue Stained Glass",
+          "color": "#334cb2",
+          "meta": 11
+        },
+        {
+          "name": "Brown Stained Glass",
+          "color": "#664c33",
+          "meta": 12
+        },
+        {
+          "name": "Green Stained Glass",
+          "color": "#667f33",
+          "meta": 13
+        },
+        {
+          "name": "Red Stained Glass",
+          "color": "#993333",
+          "meta": 14
+        },
+        {
+          "name": "Black Stained Glass",
+          "color": "#191919",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:stained_glass_pane",
+      "name": "White Stained Glass Pane",
+      "color": "#ffffff",
+      "alpha": 0.4,
+      "meta": 0,
+      "variants": [
+        {
+          "name": "Orange Stained Glass Pane",
+          "color": "#d87f33",
+          "meta": 1
+        },
+        {
+          "name": "Magenta Stained Glass Pane",
+          "color": "#b24cd8",
+          "meta": 2
+        },
+        {
+          "name": "Light Blue Stained Glass Pane",
+          "color": "#6699d8",
+          "meta": 3
+        },
+        {
+          "name": "Yellow Stained Glass Pane",
+          "color": "#e5e533",
+          "meta": 4
+        },
+        {
+          "name": "Lime Stained Glass Pane",
+          "color": "#7fcc19",
+          "meta": 5
+        },
+        {
+          "name": "Pink Stained Glass Pane",
+          "color": "#f27fa5",
+          "meta": 6
+        },
+        {
+          "name": "Gray Stained Glass Pane",
+          "color": "#4c4c4c",
+          "meta": 7
+        },
+        {
+          "name": "Light Gray Stained Glass Pane",
+          "color": "#999999",
+          "meta": 8
+        },
+        {
+          "name": "Cyan Stained Glass Pane",
+          "color": "#4c7f99",
+          "meta": 9
+        },
+        {
+          "name": "Purple Stained Glass Pane",
+          "color": "#7f3fb2",
+          "meta": 10
+        },
+        {
+          "name": "Blue Stained Glass Pane",
+          "color": "#334cb2",
+          "meta": 11
+        },
+        {
+          "name": "Brown Stained Glass Pane",
+          "color": "#664c33",
+          "meta": 12
+        },
+        {
+          "name": "Green Stained Glass Pane",
+          "color": "#667f33",
+          "meta": 13
+        },
+        {
+          "name": "Red Stained Glass Pane",
+          "color": "#993333",
+          "meta": 14
+        },
+        {
+          "name": "Black Stained Glass Pane",
+          "color": "#191919",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:stained_hardened_clay",
+      "name": "Purple Hardened Clay",
+      "color": "#764656",
+      "alpha": 1.0,
+      "meta": 10,
+      "variants": [
+        {
+          "name": "White Hardened Clay",
+          "color": "#d1b2a1",
+          "meta": 0
+        },
+        {
+          "name": "Orange Hardened Clay",
+          "color": "#a15425",
+          "meta": 1
+        },
+        {
+          "name": "Magenta Hardened Clay",
+          "color": "#95586c",
+          "meta": 2
+        },
+        {
+          "name": "Light Blue Hardened Clay",
+          "color": "#716c89",
+          "meta": 3
+        },
+        {
+          "name": "Yellow Hardened Clay",
+          "color": "#ba8523",
+          "meta": 4
+        },
+        {
+          "name": "Lime Hardened Clay",
+          "color": "#677534",
+          "meta": 5
+        },
+        {
+          "name": "Pink Hardened Clay",
+          "color": "#a14e4e",
+          "meta": 6
+        },
+        {
+          "name": "Gray Hardened Clay",
+          "color": "#3a2a23",
+          "meta": 7
+        },
+        {
+          "name": "Light Gray Hardened Clay",
+          "color": "#876b61",
+          "meta": 8
+        },
+        {
+          "name": "Cyan Hardened Clay",
+          "color": "#565b5b",
+          "meta": 9
+        },
+        {
+          "name": "Blue Hardened Clay",
+          "color": "#4a3b5b",
+          "meta": 11
+        },
+        {
+          "name": "Brown Hardened Clay",
+          "color": "#4d3323",
+          "meta": 12
+        },
+        {
+          "name": "Green Hardened Clay",
+          "color": "#4c532a",
+          "meta": 13
+        },
+        {
+          "name": "Red Hardened Clay",
+          "color": "#8f3d2f",
+          "meta": 14
+        },
+        {
+          "name": "Black Hardened Clay",
+          "color": "#251710",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:sticky_piston",
+      "name": "Sticky Piston",
+      "color": "#656565",
+      "alpha": 1.0,
+      "meta": 8,
+      "variants": [
+        {
+          "color": "#8d9364",
+          "meta": 1
+        },
+        {
+          "color": "#716c65",
+          "meta": 13
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:stone",
+      "name": "Stone",
+      "color": "#7d7d7d",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "name": "Granite",
+          "color": "#987162",
+          "meta": 1
+        },
+        {
+          "name": "Polished Granite",
+          "color": "#a07361",
+          "meta": 2
+        },
+        {
+          "name": "Diorite",
+          "color": "#b3b3b6",
+          "meta": 3
+        },
+        {
+          "name": "Polished Diorite",
+          "color": "#b7b7b9",
+          "meta": 4
+        },
+        {
+          "name": "Andesite",
+          "color": "#838383",
+          "meta": 5
+        },
+        {
+          "name": "Polished Andesite",
+          "color": "#828285",
+          "meta": 6
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:stone_brick_stairs",
+      "name": "Stone Brick Stairs",
+      "color": "#797979",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:stone_button",
+      "name": "Button",
+      "color": "#7d7d7d",
+      "alpha": 1.0,
+      "meta": 13
+    },
+    {
+      "uid": "minecraft:stone_pressure_plate",
+      "name": "Stone Pressure Plate",
+      "color": "#7d7d7d",
+      "alpha": 1.0,
+      "meta": 1
+    },
+    {
+      "uid": "minecraft:stone_slab",
+      "name": "Stone Slab",
+      "color": "#a6a6a6",
+      "alpha": 1.0,
+      "meta": 8,
+      "variants": [
+        {
+          "color": "#ddd5a3",
+          "meta": 9
+        },
+        {
+          "color": "#a68753",
+          "meta": 10
+        },
+        {
+          "color": "#7b7b7b",
+          "meta": 11
+        },
+        {
+          "color": "#885547",
+          "meta": 12
+        },
+        {
+          "color": "#797979",
+          "meta": 13
+        },
+        {
+          "color": "#2d161a",
+          "meta": 14
+        },
+        {
+          "color": "#ece9e2",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:stone_slab2",
+      "name": "Red Sandstone Slab",
+      "color": "#a9561e",
+      "alpha": 1.0,
+      "meta": 8
+    },
+    {
+      "uid": "minecraft:stone_stairs",
+      "name": "Cobblestone Stairs",
+      "color": "#7b7b7b",
+      "alpha": 1.0,
+      "meta": 7
+    },
+    {
+      "uid": "minecraft:stonebrick",
+      "name": "Stone Bricks",
+      "color": "#797979",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "name": "Mossy Stone Bricks",
+          "color": "#72766a",
+          "meta": 1
+        },
+        {
+          "name": "Cracked Stone Bricks",
+          "color": "#767676",
+          "meta": 2
+        },
+        {
+          "name": "Chiseled Stone Bricks",
+          "color": "#747474",
+          "meta": 3
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:structure_block",
+      "name": "Structure Block",
+      "color": "#695e61",
+      "alpha": 1.0,
+      "meta": 3,
+      "variants": [
+        {
+          "color": "#63575a",
+          "meta": 0
+        },
+        {
+          "color": "#524346",
+          "meta": 1
+        },
+        {
+          "color": "#5c4e52",
+          "meta": 2
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:tnt",
+      "name": "TNT",
+      "color": "#ad5d47",
+      "alpha": 1.0,
+      "meta": 1
+    },
+    {
+      "uid": "minecraft:trapdoor",
+      "name": "Wooden Trapdoor",
+      "color": "#82602f",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:trapped_chest",
+      "name": "Trapped Chest",
+      "color": "#a68753",
+      "alpha": 1.0,
+      "meta": 5
+    },
+    {
+      "uid": "minecraft:tripwire",
+      "name": "Tripwire",
+      "color": "#818181",
+      "alpha": 1.0,
+      "meta": 13
+    },
+    {
+      "uid": "minecraft:tripwire_hook",
+      "name": "Tripwire Hook",
+      "color": "#a68753",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:unpowered_comparator",
+      "name": "Redstone Comparator",
+      "color": "#a0a0a0",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:unpowered_repeater",
+      "name": "Redstone Repeater",
+      "color": "#a0a0a0",
+      "alpha": 1.0,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:vine",
+      "name": "Vines",
+      "color": "#747474",
+      "alpha": 0.2,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:water",
+      "name": "Water",
+      "color": "#2e43f4",
+      "alpha": 0.3,
+      "meta": 15
+    },
+    {
+      "uid": "minecraft:waterlily",
+      "name": "Lily Pad",
+      "color": "#797979",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:web",
+      "name": "Cobweb",
+      "color": "#dbdbdb",
+      "alpha": 1.0,
+      "meta": 0
+    },
+    {
+      "uid": "minecraft:wheat",
+      "name": "Crops",
+      "color": "#258f05",
+      "alpha": 1.0,
+      "meta": 2,
+      "variants": [
+        {
+          "color": "#08a702",
+          "meta": 0
+        },
+        {
+          "color": "#179804",
+          "meta": 1
+        },
+        {
+          "color": "#308406",
+          "meta": 3
+        },
+        {
+          "color": "#317706",
+          "meta": 4
+        },
+        {
+          "color": "#3b7107",
+          "meta": 5
+        },
+        {
+          "color": "#517406",
+          "meta": 6
+        },
+        {
+          "color": "#506306",
+          "meta": 7
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:wooden_button",
+      "name": "Button",
+      "color": "#a68753",
+      "alpha": 1.0,
+      "meta": 13
+    },
+    {
+      "uid": "minecraft:wooden_door",
+      "name": "Oak Door",
+      "color": "#896834",
+      "alpha": 1.0,
+      "meta": 7,
+      "variants": [
+        {
+          "color": "#886835",
+          "meta": 11
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:wooden_pressure_plate",
+      "name": "Wooden Pressure Plate",
+      "color": "#a68753",
+      "alpha": 1.0,
+      "meta": 1
+    },
+    {
+      "uid": "minecraft:wooden_slab",
+      "name": "Oak Wood Slab",
+      "color": "#a37552",
+      "alpha": 1.0,
+      "meta": 11,
+      "variants": [
+        {
+          "color": "#a68753",
+          "meta": 8
+        },
+        {
+          "color": "#6e5231",
+          "meta": 9
+        },
+        {
+          "color": "#caba7f",
+          "meta": 10
+        },
+        {
+          "color": "#af5f34",
+          "meta": 12
+        },
+        {
+          "color": "#402913",
+          "meta": 13
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:wool",
+      "name": "Wool",
+      "color": "#dcdcdc",
+      "alpha": 1.0,
+      "meta": 0,
+      "variants": [
+        {
+          "name": "Orange Wool",
+          "color": "#da7c3e",
+          "meta": 1
+        },
+        {
+          "name": "Magenta Wool",
+          "color": "#b350bc",
+          "meta": 2
+        },
+        {
+          "name": "Light Blue Wool",
+          "color": "#6989c8",
+          "meta": 3
+        },
+        {
+          "name": "Yellow Wool",
+          "color": "#b0a527",
+          "meta": 4
+        },
+        {
+          "name": "Lime Wool",
+          "color": "#41ad38",
+          "meta": 5
+        },
+        {
+          "name": "Pink Wool",
+          "color": "#cf8398",
+          "meta": 6
+        },
+        {
+          "name": "Gray Wool",
+          "color": "#404040",
+          "meta": 7
+        },
+        {
+          "name": "Light Gray Wool",
+          "color": "#9aa0a0",
+          "meta": 8
+        },
+        {
+          "name": "Cyan Wool",
+          "color": "#2e6e88",
+          "meta": 9
+        },
+        {
+          "name": "Purple Wool",
+          "color": "#7e3db5",
+          "meta": 10
+        },
+        {
+          "name": "Blue Wool",
+          "color": "#2e388c",
+          "meta": 11
+        },
+        {
+          "name": "Brown Wool",
+          "color": "#4e321f",
+          "meta": 12
+        },
+        {
+          "name": "Green Wool",
+          "color": "#34461b",
+          "meta": 13
+        },
+        {
+          "name": "Red Wool",
+          "color": "#963330",
+          "meta": 14
+        },
+        {
+          "name": "Black Wool",
+          "color": "#191616",
+          "meta": 15
+        }
+      ]
+    },
+    {
+      "uid": "minecraft:yellow_flower",
+      "name": "Dandelion",
+      "color": "#afb401",
+      "alpha": 1.0,
+      "meta": 0
+    }
+  ]
+}

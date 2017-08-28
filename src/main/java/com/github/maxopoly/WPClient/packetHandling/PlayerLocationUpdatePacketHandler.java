@@ -2,7 +2,8 @@ package com.github.maxopoly.WPClient.packetHandling;
 
 import com.github.maxopoly.WPCommon.model.LocationTracker;
 import com.github.maxopoly.WPCommon.model.LoggedPlayerLocation;
-import com.github.maxopoly.WPCommon.packetHandling.AbstractPacketHandler;
+import com.github.maxopoly.WPCommon.packetHandling.PacketIndex;
+import com.github.maxopoly.WPCommon.packetHandling.incoming.JSONPacketHandler;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,13 +11,9 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class PlayerLocationUpdatePacketHandler extends AbstractPacketHandler {
+public class PlayerLocationUpdatePacketHandler implements JSONPacketHandler {
 
 	private static Set<String> updatedPlayers = new HashSet<String>();
-
-	public PlayerLocationUpdatePacketHandler() {
-		super("playerLocations");
-	}
 
 	public static void stagePlayerForUpdate(String name) {
 		synchronized (updatedPlayers) {
@@ -26,7 +23,7 @@ public class PlayerLocationUpdatePacketHandler extends AbstractPacketHandler {
 
 	public static List<String> popLocationsToUpdate() {
 		synchronized (updatedPlayers) {
-			List<String> copy = new LinkedList(updatedPlayers);
+			List<String> copy = new LinkedList<String>(updatedPlayers);
 			updatedPlayers.clear();
 			return copy;
 		}
@@ -43,6 +40,11 @@ public class PlayerLocationUpdatePacketHandler extends AbstractPacketHandler {
 				tracker.reportLocally(loc);
 			}
 		}
+	}
+
+	@Override
+	public PacketIndex getPacketToHandle() {
+		return PacketIndex.PlayerLocationPush;
 	}
 
 }

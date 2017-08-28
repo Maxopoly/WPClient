@@ -4,17 +4,14 @@ import com.github.maxopoly.WPClient.journeyMap.ItemLocationWayPointHandler;
 import com.github.maxopoly.WPCommon.model.Chest;
 import com.github.maxopoly.WPCommon.model.Location;
 import com.github.maxopoly.WPCommon.model.WPItem;
-import com.github.maxopoly.WPCommon.packetHandling.AbstractPacketHandler;
+import com.github.maxopoly.WPCommon.packetHandling.PacketIndex;
+import com.github.maxopoly.WPCommon.packetHandling.incoming.JSONPacketHandler;
 import java.util.LinkedList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class ItemLocationPacketHandler extends AbstractPacketHandler {
-
-	public ItemLocationPacketHandler() {
-		super("itemLocation");
-	}
+public class ItemLocationPacketHandler implements JSONPacketHandler {
 
 	@Override
 	public void handle(JSONObject json) {
@@ -35,5 +32,10 @@ public class ItemLocationPacketHandler extends AbstractPacketHandler {
 			chests.add(c);
 		}
 		ItemLocationWayPointHandler.getInstance().markLocations(item, chests);
+	}
+
+	@Override
+	public PacketIndex getPacketToHandle() {
+		return PacketIndex.ItemLocationReply;
 	}
 }
