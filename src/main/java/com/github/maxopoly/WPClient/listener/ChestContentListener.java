@@ -55,12 +55,12 @@ public class ChestContentListener {
 		lastClickedChest = adJustChestLocation(pos);
 	}
 
-	private int getBlockID(BlockPos pos) {
+	public static int getBlockID(BlockPos pos) {
 		IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(pos);
 		return Block.getIdFromBlock(state.getBlock());
 	}
 
-	private Location adJustChestLocation(BlockPos pos) {
+	public static Location adJustChestLocation(BlockPos pos) {
 		int mainID = getBlockID(pos);
 		int southID = getBlockID(pos.south());
 		if (mainID == southID) {
@@ -75,7 +75,7 @@ public class ChestContentListener {
 
 	}
 
-	private boolean isChest(int id) {
+	public static boolean isChest(int id) {
 		return id == 146 || id == 54;
 	}
 

@@ -1,6 +1,8 @@
 package com.github.maxopoly.WPClient.journeyMap;
 
 import com.github.maxopoly.WPClient.WPClientForgeMod;
+import com.github.maxopoly.WPClient.listener.ChestContentListener;
+import com.github.maxopoly.WPClient.packetCreation.ChestDeletionPacket;
 import com.github.maxopoly.WPClient.util.ItemUtils;
 import com.github.maxopoly.WPCommon.model.Chest;
 import com.github.maxopoly.WPCommon.model.Location;
@@ -19,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import org.apache.logging.log4j.Logger;
 
 public class ItemLocationWayPointHandler {
@@ -65,6 +68,14 @@ public class ItemLocationWayPointHandler {
 		int maxDistance = WPClientForgeMod.getInstance().getConfig().getMaxItemWayPointDistance();
 		while (iter.hasNext()) {
 			Chest chest = iter.next();
+			if (!isLocationValid(chest.getLocation())) {
+				if (WPClientForgeMod.getInstance().isConnectionReady()) {
+					WPClientForgeMod.getInstance().getServerConnection()
+							.sendMessage(new ChestDeletionPacket(chest.getLocation()));
+				}
+				iter.remove();
+				continue;
+			}
 			if (maxDistance > 0 && playerLoc != null && playerLoc.distance(chest.getLocation()) > maxDistance) {
 				iter.remove();
 				continue;
@@ -84,6 +95,31 @@ public class ItemLocationWayPointHandler {
 					TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum), TextFormatting.GRAY,
 					TextFormatting.WHITE, prettyName, TextFormatting.GRAY, chests.size(), s)));
 		}
+	}
+
+	public boolean isLocationValid(Location loc) {
+		World world = Minecraft.getMinecraft().theWorld;
+		if (world == null) {
+			return true;
+		}
+		BlockPos pos = JourneyMapPlugin.convertPosition(loc);
+		if (world.isBlockLoaded(pos)) {
+			int id = ChestContentListener.getBlockID(pos);
+			// chest or obfuscated
+			if (ChestContentListener.isChest(id)) {
+				if (!ChestContentListener.adJustChestLocation(pos).equals(loc)) {
+					return false;
+				}
+				return true;
+			} else {
+				if (id == 1) {
+					// stone, assume it's obfuscated
+					return true;
+				}
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void scheduleRemoval() {

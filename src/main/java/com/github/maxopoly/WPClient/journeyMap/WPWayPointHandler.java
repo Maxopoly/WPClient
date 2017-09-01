@@ -53,6 +53,7 @@ public class WPWayPointHandler {
 			scheduler.shutdown();
 		}
 		scheduler = Executors.newScheduledThreadPool(1);
+		FMLLog.getLogger().info("Scheduled with " + ms);
 		scheduler.scheduleWithFixedDelay(new Runnable() {
 
 			@Override
@@ -110,35 +111,29 @@ public class WPWayPointHandler {
 			FMLLog.getLogger().info("Handling " + entry.getKey().toString());
 			boolean hideAll = !config.isWPWayPointVisible(entry.getKey());
 			int maxDistance = config.getMaxWPWayPointDistance(entry.getKey());
-			if (maxDistance == 0) {
-				continue;
-			}
 			for (Waypoint point : entry.getValue()) {
 				FMLLog.getLogger().info("Point " + point.getName());
 				Location pointLoc = JourneyMapPlugin.convertPosition(point.getPosition());
 				int distance = playerLoc.distance(pointLoc);
-				boolean update = false;
+				FMLLog.getLogger().info("Distance " + distance);
+				FMLLog.getLogger().info(hideAll);
 				if (point.isDisplayed(0)) {
 					FMLLog.getLogger().info("a");
 					if (hideAll || distance > maxDistance) {
 						FMLLog.getLogger().info("Hiding " + point.getName());
 						point.setDisplayed(0, false);
-						update = true;
 					}
 				} else {
 					FMLLog.getLogger().info("b");
-					if (distance <= maxDistance && !hideAll) {
+					if (maxDistance == 0 || (distance <= maxDistance && !hideAll)) {
 						FMLLog.getLogger().info("Showing " + point.getName());
 						point.setDisplayed(0, true);
-						update = true;
 					}
 				}
-				if (update) {
-					try {
-						jmAPI.show(point);
-					} catch (Exception e) {
-						logger.error("Failed to update waypoint", e);
-					}
+				try {
+					jmAPI.show(point);
+				} catch (Exception e) {
+					logger.error("Failed to update waypoint", e);
 				}
 			}
 		}
