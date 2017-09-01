@@ -5,6 +5,7 @@ import com.github.maxopoly.WPClient.model.AccountCache;
 import com.github.maxopoly.WPClient.packetHandling.PlayerLocationUpdatePacketHandler;
 import com.github.maxopoly.WPCommon.model.Location;
 import com.github.maxopoly.WPCommon.model.LocationTracker;
+import com.github.maxopoly.WPCommon.model.LoggedPlayerLocation;
 import com.github.maxopoly.WPCommon.model.Player;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,12 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import journeymap.client.api.IClientAPI;
-import journeymap.client.api.display.ModWaypoint;
-import journeymap.client.api.model.MapImage;
+import journeymap.client.api.display.Waypoint;
+import journeymap.client.api.display.WaypointGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -29,26 +29,24 @@ public class PlayerLocationWaypointHandler {
 
 	// after this time waypoints will show when the location was last reported
 	private static final int timerStartMilliSeconds = 5000;
-	// 30 minutes
-	private static final int playerLocationTimeout = 900000;
 
-	private Map<String, ModWaypoint> existingWaypoints;
+	private Map<String, Waypoint> existingWaypoints;
 	private IClientAPI jmAPI;
 	private Logger logger;
 	private Minecraft mc;
-	private MapImage icon;
+	private WaypointGroup group;
 
 	public PlayerLocationWaypointHandler(IClientAPI jmAPI, Logger logger, Minecraft mc) {
 		logger.info("Creating handler");
-		this.existingWaypoints = new HashMap<String, ModWaypoint>();
+		this.existingWaypoints = new HashMap<String, Waypoint>();
 		this.mc = mc;
 		this.jmAPI = jmAPI;
 		this.logger = logger;
-		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16).setAnchorY(16);
+		this.group = new WaypointGroup(WPClientForgeMod.MODID, "player");
 	}
 
-	public ModWaypoint createPlayerWaypoint(String playerName, Location loc) {
-		ModWaypoint point = existingWaypoints.get(playerName);
+	public Waypoint createPlayerWaypoint(String playerName, Location loc) {
+		Waypoint point = existingWaypoints.get(playerName);
 		AccountCache accountCache = AccountCache.getInstance();
 		Player player = accountCache.getPlayerInfoFor(playerName);
 		String wayPointName = constructPlayerInfoString(playerName, player);
@@ -60,14 +58,16 @@ public class PlayerLocationWaypointHandler {
 		}
 		int color = getStandingColor(standing);
 		if (point != null) {
-			point.setPoint(new BlockPos(loc.getX(), loc.getY() + 1, loc.getZ()));
-			point.setWaypointName(wayPointName);
+			point.setPosition(0, new BlockPos(loc.getX(), loc.getY() + 1, loc.getZ()));
+			point.setName(wayPointName);
 			point.setColor(color);
 		} else {
-			point = new ModWaypoint(WPClientForgeMod.MODID, wayPointName + ";;" + "WPC", "playerLocations", wayPointName,
-					(int) loc.getX(), (int) loc.getY() + 1, (int) loc.getZ(), icon, color, false, 0);
-			// this needs to be done explicitly because the api is bugged
+			point = new Waypoint(WPClientForgeMod.MODID, wayPointName, 0, new BlockPos(loc.getX(), loc.getY() + 1,
+					loc.getZ()));
+			point.setColor(color);
+			point.setEditable(false);
 			point.setPersistent(false);
+			point.setGroup(group);
 			existingWaypoints.put(playerName, point);
 		}
 		try {
@@ -83,10 +83,10 @@ public class PlayerLocationWaypointHandler {
 		if (mc.theWorld == null) {
 			return;
 		}
-		if (!WPClientForgeMod.getInstance().isEnabled()) {
+		if (!WPClientForgeMod.getInstance().connectedToCivClassics()) {
 			return;
 		}
-		Map<String, ModWaypoint> pointsToUpdate = new HashMap<String, ModWaypoint>(existingWaypoints);
+		Map<String, Waypoint> pointsToUpdate = new HashMap<String, Waypoint>(existingWaypoints);
 		LocationTracker tracker = LocationTracker.getInstance();
 		AccountCache accountCache = AccountCache.getInstance();
 		List<String> toUpdate = PlayerLocationUpdatePacketHandler.popLocationsToUpdate();
@@ -107,10 +107,10 @@ public class PlayerLocationWaypointHandler {
 			pointsToUpdate.remove(leftOver);
 		}
 		// all other way points are old and their timer needs to be updated
-		Iterator<Entry<String, ModWaypoint>> iter = pointsToUpdate.entrySet().iterator();
+		Iterator<Entry<String, Waypoint>> iter = pointsToUpdate.entrySet().iterator();
 		long currentTime = System.currentTimeMillis();
 		while (iter.hasNext()) {
-			Entry<String, ModWaypoint> entry = iter.next();
+			Entry<String, Waypoint> entry = iter.next();
 			String playerName = entry.getKey();
 			if (playerName.equals(mc.thePlayer.getName())) {
 				continue;
@@ -123,20 +123,34 @@ public class PlayerLocationWaypointHandler {
 				standing = 0;
 			}
 			int color = getStandingColor(standing);
-			long lastSeen = tracker.getLastKnownLocation(playerName).getTimeStamp();
+			LoggedPlayerLocation updatedLoc = tracker.getLastKnownLocation(playerName);
+			if (updatedLoc == null) {
+				logger.warn("Location of " + playerName + " was null and could not be updated?");
+				continue;
+			}
+			long lastSeen = updatedLoc.getTimeStamp();
 			long sinceLastSeen = currentTime - lastSeen;
-			ModWaypoint wayPoint = entry.getValue();
+			Waypoint wayPoint = entry.getValue();
 			if (sinceLastSeen > timerStartMilliSeconds) {
-				if (sinceLastSeen > playerLocationTimeout) {
+				int timeout;
+				if (standing > 0) {
+					timeout = WPClientForgeMod.getInstance().getConfig().getMaxAllyTimer();
+				} else if (standing < 0) {
+					timeout = WPClientForgeMod.getInstance().getConfig().getMaxHostileTimer();
+				} else {
+					timeout = WPClientForgeMod.getInstance().getConfig().getMaxNeutTimer();
+				}
+				timeout = Math.max(timeout, timerStartMilliSeconds);
+				if (sinceLastSeen > timeout) {
 					JourneyMapPlugin.dirtyWayPointRemoval(wayPoint);
 					continue;
 				}
 				String wayPointName = constructPlayerInfoString(playerName, play);
 				String newName = wayPointName + "  " + constructTimeString(sinceLastSeen);
-				if (newName.equals(wayPoint.getWaypointName()) && color == wayPoint.getColor()) {
+				if (newName.equals(wayPoint.getName()) && color == wayPoint.getColor()) {
 					continue;
 				}
-				wayPoint.setWaypointName(newName);
+				wayPoint.setName(newName);
 				wayPoint.setColor(color);
 				try {
 					jmAPI.show(wayPoint);

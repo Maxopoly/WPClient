@@ -6,6 +6,7 @@ import com.github.maxopoly.WPClient.listener.ChestContentListener;
 import com.github.maxopoly.WPClient.listener.IngameGUIListener;
 import com.github.maxopoly.WPClient.listener.JEI_GUI_Listener;
 import com.github.maxopoly.WPClient.listener.MainMenuGUIListener;
+import com.github.maxopoly.WPClient.listener.MiscListener;
 import com.github.maxopoly.WPClient.listener.PlayerProximityListener;
 import com.github.maxopoly.WPClient.listener.SnitchHitHandler;
 import com.github.maxopoly.WPClient.packetCreation.PlayerLocationPacket;
@@ -24,17 +25,13 @@ import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = WPClientForgeMod.MODID, version = WPClientForgeMod.VERSION)
+@Mod(modid = WPClientForgeMod.MODID, version = WPClientForgeMod.VERSION, guiFactory = "com.github.maxopoly.WPClient.gui.WPConfigGuiFactory")
 public class WPClientForgeMod {
 	public static final String MODID = "wpclient";
-	public static final String VERSION = "1.0";
-
-	private final static String serverIP = "mc.civclassic.com";
+	public static final String VERSION = "1.1";
 
 	private static WPClientForgeMod instance;
 
@@ -43,6 +40,7 @@ public class WPClientForgeMod {
 	private SessionManager sessionManager;
 	private Logger logger;
 	private boolean enabled;
+	private WPConfiguration config;
 
 	public static WPClientForgeMod getInstance() {
 		return instance;
@@ -54,6 +52,16 @@ public class WPClientForgeMod {
 
 	public SessionManager getSessionManager() {
 		return sessionManager;
+	}
+
+	public WPConfiguration getConfig() {
+		return config;
+	}
+
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		MapDataSyncSession.replaceColorPalette();
+		config = new WPConfiguration(event.getSuggestedConfigurationFile());
 	}
 
 	@EventHandler
@@ -69,8 +77,8 @@ public class WPClientForgeMod {
 		MinecraftForge.EVENT_BUS.register(new MainMenuGUIListener());
 		MinecraftForge.EVENT_BUS.register(new PlayerProximityListener());
 		MinecraftForge.EVENT_BUS.register(new IngameGUIListener());
+		MinecraftForge.EVENT_BUS.register(new MiscListener("mc.civclassic.com"));
 
-		MapDataSyncSession.replaceColorPalette();
 		sessionManager = new SessionManager(mc, logger);
 		connection = new ServerConnection(mc, logger);
 		new Thread(new Runnable() {
@@ -90,17 +98,8 @@ public class WPClientForgeMod {
 		}, 500, 500, TimeUnit.MILLISECONDS);
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onConnect(ClientConnectedToServerEvent e) {
-		String ip = mc.getCurrentServerData().serverIP;
-		logger.info("[WPC]Connecting to  " + ip);
-		if (ip.endsWith(serverIP)) {
-			enabled = true;
-			logger.info("[WPC]Enabling functionality as player is connecting to right ip");
-		} else {
-			enabled = false;
-			logger.info("[WPC]Disabling functionality as player is connecting to wrong ip");
-		}
+	public void setFunctionalityEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public synchronized void reconnect() {
@@ -126,7 +125,7 @@ public class WPClientForgeMod {
 		;
 	}
 
-	public boolean isEnabled() {
+	public boolean connectedToCivClassics() {
 		return enabled;
 	}
 
@@ -134,7 +133,7 @@ public class WPClientForgeMod {
 	 * @return Whether the player is connected to both civclassics and the wp server
 	 */
 	public boolean isConnectionReady() {
-		return isEnabled() && connectedToWPServer();
+		return connectedToCivClassics() && connectedToWPServer();
 	}
 
 	/**
@@ -145,7 +144,7 @@ public class WPClientForgeMod {
 	}
 
 	private void sendPlayerLocations() {
-		if (!isEnabled() || !connection.isInitialized()) {
+		if (!connectedToCivClassics() || !connection.isInitialized()) {
 			return;
 		}
 		LocationTracker tracker = LocationTracker.getInstance();

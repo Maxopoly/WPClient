@@ -6,16 +6,17 @@ import com.github.maxopoly.WPCommon.model.Chest;
 import com.github.maxopoly.WPCommon.model.Location;
 import com.github.maxopoly.WPCommon.model.WPItem;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import journeymap.client.api.IClientAPI;
-import journeymap.client.api.display.ModWaypoint;
-import journeymap.client.api.model.MapImage;
+import journeymap.client.api.display.Waypoint;
+import journeymap.client.api.display.WaypointGroup;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.logging.log4j.Logger;
@@ -24,9 +25,9 @@ public class ItemLocationWayPointHandler {
 
 	private static ItemLocationWayPointHandler instance;
 
-	private Set<ModWaypoint> points;
-	private MapImage icon;
+	private Set<Waypoint> points;
 	private ScheduledExecutorService cleanUpExec;
+	private WaypointGroup group;
 
 	public static ItemLocationWayPointHandler getInstance() {
 		return instance;
@@ -40,9 +41,9 @@ public class ItemLocationWayPointHandler {
 		this.jmAPI = jmAPI;
 		this.logger = logger;
 		this.mc = mc;
-		this.points = new HashSet<ModWaypoint>();
+		this.points = new HashSet<Waypoint>();
+		this.group = new WaypointGroup(WPClientForgeMod.MODID, "items");
 		instance = this;
-		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16).setAnchorY(16);
 	}
 
 	public synchronized void markLocations(WPItem item, List<Chest> chests) {
@@ -56,7 +57,18 @@ public class ItemLocationWayPointHandler {
 			return;
 		}
 		int sum = 0;
-		for (Chest chest : chests) {
+		Iterator<Chest> iter = chests.iterator();
+		Location playerLoc = null;
+		if (mc.thePlayer != null) {
+			playerLoc = new Location(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+		}
+		int maxDistance = WPClientForgeMod.getInstance().getConfig().getMaxItemWayPointDistance();
+		while (iter.hasNext()) {
+			Chest chest = iter.next();
+			if (maxDistance > 0 && playerLoc != null && playerLoc.distance(chest.getLocation()) > maxDistance) {
+				iter.remove();
+				continue;
+			}
 			sum += ItemUtils.calculateItemCount(chest);
 		}
 		for (Chest chest : chests) {
@@ -85,11 +97,11 @@ public class ItemLocationWayPointHandler {
 			public void run() {
 				hideAll();
 			}
-		}, 60, TimeUnit.SECONDS);
+		}, WPClientForgeMod.getInstance().getConfig().getMaxItemWayPointTimer(), TimeUnit.SECONDS);
 	}
 
 	public synchronized void hideAll() {
-		for (ModWaypoint point : points) {
+		for (Waypoint point : points) {
 			JourneyMapPlugin.dirtyWayPointRemoval(point);
 		}
 		points.clear();
@@ -115,9 +127,12 @@ public class ItemLocationWayPointHandler {
 				color = 0x99ccff;
 			}
 		}
-		ModWaypoint point = new ModWaypoint(WPClientForgeMod.MODID, loc.toString() + ";;WPC", "itemLocations",
-				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount, totalCount, false) + " " + name,
-				(int) loc.getX(), (int) loc.getY(), (int) loc.getZ(), icon, color, false, 0);
+		Waypoint point = new Waypoint(WPClientForgeMod.MODID, ItemUtils.prettifyItemCountWaypointName(item.getID(),
+				itemCount, totalCount, false) + " " + name, 0, new BlockPos(loc.getX(), loc.getY(), loc.getZ()));
+		point.setPersistent(false);
+		point.setColor(color);
+		point.setEditable(false);
+		point.setGroup(group);
 		points.add(point);
 		try {
 			jmAPI.show(point);

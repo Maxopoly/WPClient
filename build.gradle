@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
-version = "1.0"
+version = "1.1"
 group= "com.github.maxopoly" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "WPClient"
 
@@ -25,6 +25,7 @@ repositories {
   jcenter()
   mavenLocal()
   mavenCentral()
+  maven { url 'https://oss.sonatype.org/content/groups/public/' }
 }
 
 configurations {
@@ -76,7 +77,9 @@ dependencies {
     shade group: 'org.json', name: 'json', version: '20160810'
     shade group: 'com.github.maxopoly', name: 'WPCommon', version: '1.0'
     compile group: 'mezz.jei', name: 'jei_1.10.2', version: '1.0'
-    compile group: 'info.journeymap', name: 'journeymap-api', version: '1.9-1.2', changing: true
+    compile group: 'info.journeymap', name: 'journeymap-api', version: '1.10.2-1.4-SNAPSHOT', changing: true
+    //install a journeymap jar locally for this one
+    compile group: 'journeymap', name: 'journeymap', version: '5.5.0b3'
     
 
 }

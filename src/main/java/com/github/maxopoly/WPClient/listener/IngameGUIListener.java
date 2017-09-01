@@ -3,14 +3,13 @@ package com.github.maxopoly.WPClient.listener;
 import com.github.maxopoly.WPClient.gui.GuiIngameHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class IngameGUIListener {
 
-	@SubscribeEvent
+	// @SubscribeEvent
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
-		FMLLog.getLogger().info("Render");
+
 		Minecraft mc = Minecraft.getMinecraft();
 		if (mc.currentScreen == null) {
 			FMLLog.getLogger().info("Ingame");

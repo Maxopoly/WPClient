@@ -1,5 +1,6 @@
 package com.github.maxopoly.WPClient.gui;
 
+import com.github.maxopoly.WPClient.WPClientForgeMod;
 import com.github.maxopoly.WPClient.journeyMap.MapDataSyncSession;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -14,19 +15,15 @@ public class GuiMapSync extends GuiScreen {
 	private MapDataSyncSession session;
 
 	private GuiButton backButton;
+	private GuiButton startButton;
 
 	@Override
 	public void initGui() {
-		session = MapDataSyncSession.newSyncSession();
+		session = MapDataSyncSession.getInstance();
 		this.backButton = new GuiButton(0, this.width / 2 - 154, this.height - 52, 150, 20, "Back");
+		this.startButton = new GuiButton(1, this.width / 2 + 4, this.height - 52, 150, 20, "Start sync");
 		addButton(backButton);
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				session.initSync();
-			}
-		}).start();
+		addButton(startButton);
 	}
 
 	@Override
@@ -40,6 +37,18 @@ public class GuiMapSync extends GuiScreen {
 	protected void actionPerformed(GuiButton button) {
 		if (button.id == 0) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiMainMenu());
+		} else {
+			// start button
+			if (!WPClientForgeMod.getInstance().connectedToWPServer()) {
+				return;
+			}
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					session.initSync();
+				}
+			}).start();
 		}
 	}
 }

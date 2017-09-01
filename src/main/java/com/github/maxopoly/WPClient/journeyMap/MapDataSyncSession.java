@@ -32,9 +32,14 @@ public class MapDataSyncSession extends MapDataFileHandler {
 	public MapDataSyncSession(int sessionID) {
 		super(FMLLog.getLogger());
 		this.sessionID = sessionID;
+		status = WPClientForgeMod.getInstance().connectedToWPServer() ? "Connected to server and ready to sync"
+				: "No connection to server, can't sync";
 	}
 
 	public synchronized static MapDataSyncSession getInstance() {
+		if (instance == null) {
+			return newSyncSession();
+		}
 		return instance;
 	}
 
@@ -81,6 +86,7 @@ public class MapDataSyncSession extends MapDataFileHandler {
 
 	public void finish() {
 		saveCachedTileHashes(cachedTiles);
+		WPClientForgeMod.getInstance().getConfig().updateMapSyncTimeStamp();
 		status = "Successfully updated your map data. " + receivedReturnFiles + " files were updated";
 		active = false;
 	}
@@ -131,10 +137,18 @@ public class MapDataSyncSession extends MapDataFileHandler {
 		return Minecraft.getMinecraft().mcDataDir;
 	}
 
+	public File getColorPalette() {
+		return new File(getBaseDirectory().getAbsolutePath() + File.separator + "journeymap" + File.separator
+				+ "colorpalette.json");
+	}
+
 	@Override
 	public String getMapDataPath() {
-		return "journeymap" + File.separator + "data" + File.separator + "mp" + File.separator
-				+ "CivClassicsWPClientData";
+		return "journeymap" + File.separator + "data" + File.separator + "mp" + File.separator + getWorldFolderName();
+	}
+
+	public static String getWorldFolderName() {
+		return "CivClassicsWPClientData";
 	}
 
 	public static void replaceColorPalette() {
@@ -146,8 +160,7 @@ public class MapDataSyncSession extends MapDataFileHandler {
 		try {
 			FileUtils.copyURLToFile(inputUrl, targetFile);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			FMLLog.getLogger().error("Failed to place color palette", e);
 		}
 
 	}

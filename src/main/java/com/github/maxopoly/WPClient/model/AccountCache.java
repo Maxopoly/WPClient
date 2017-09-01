@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.util.StringUtils;
 
 public class AccountCache {
 
@@ -31,18 +34,38 @@ public class AccountCache {
 		this.requestedPlayers = new HashSet<String>();
 	}
 
-	public Player getPlayerInfoFor(String acc) {
+	public synchronized Player getPlayerInfoFor(String acc) {
 		Player player = players.get(acc);
-		if (player == null && !requestedPlayers.contains(acc.toLowerCase())) {
+		if (player == null && WPClientForgeMod.getInstance().connectedToWPServer()
+				&& !requestedPlayers.contains(acc.toLowerCase())) {
 			WPClientForgeMod.getInstance().getServerConnection().sendMessage(new RequestPlayerInfoPacket(acc));
 			requestedPlayers.add(acc.toLowerCase());
 		}
 		return player;
 	}
 
-	public void registerPlayer(Player player) {
+	public synchronized void registerPlayer(Player player) {
 		for (MCAccount alt : player.getAccounts()) {
 			players.put(alt.getName(), player);
+		}
+	}
+
+	public synchronized void invalidatePlayerInfo(String name) {
+		players.remove(name);
+		requestedPlayers.remove(name);
+		getPlayerInfoFor(name);
+	}
+
+	public synchronized void invalidateAllPlayerInfo() {
+		players.clear();
+		factions.clear();
+		requestedPlayers.clear();
+		// rebuild cache with all online players
+		Minecraft mc = Minecraft.getMinecraft();
+		if (mc.theWorld != null) {
+			for (NetworkPlayerInfo info : mc.getConnection().getPlayerInfoMap()) {
+				getPlayerInfoFor(StringUtils.stripControlCodes(info.getGameProfile().getName()));
+			}
 		}
 	}
 

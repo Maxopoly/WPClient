@@ -8,6 +8,7 @@ import com.github.maxopoly.WPCommon.util.AES_CFB8_Encrypter;
 import com.github.maxopoly.WPCommon.util.ConnectionUtils;
 import com.github.maxopoly.WPCommon.util.PKCSEncrypter;
 import com.github.maxopoly.WPCommon.util.VarInt;
+import com.github.maxopoly.WPCommon.util.WPStatics;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,12 +28,10 @@ import org.json.JSONObject;
 
 public class ServerConnection {
 
-	private static final int port = 23452;
-	private static final int testPort = 23453;
 	private static final String serverAdress = "168.235.102.74";
 	private final static String sessionServerAdress = "https://sessionserver.mojang.com/session/minecraft/join";
 
-	private static final String tag = "tankbuster";
+	private static final String tag = "diet";
 
 	private Logger logger;
 	private ClientSidePacketForwarder packetHandler;
@@ -100,7 +99,8 @@ public class ServerConnection {
 
 	private void reestablishConnection() throws IOException {
 		this.socket = new Socket();
-		socket.connect(new InetSocketAddress(serverAdress, testPort), 3000);
+		int port = WPClientForgeMod.getInstance().getConfig().useTestServer() ? WPStatics.testPort : WPStatics.port;
+		socket.connect(new InetSocketAddress(serverAdress, port), 3000);
 		try {
 			input = new DataInputStream(socket.getInputStream());
 			output = new DataOutputStream(socket.getOutputStream());
@@ -173,6 +173,9 @@ public class ServerConnection {
 	}
 
 	private void close() {
+		if (closed) {
+			return;
+		}
 		closed = true;
 		try {
 			if (packetHandler != null) {
