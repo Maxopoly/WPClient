@@ -79,7 +79,7 @@ dependencies {
     compile group: 'mezz.jei', name: 'jei_1.10.2', version: '1.0'
     compile group: 'info.journeymap', name: 'journeymap-api', version: '1.10.2-1.4-SNAPSHOT', changing: true
     //install a journeymap jar locally for this one
-    compile group: 'journeymap', name: 'journeymap', version: '5.5.0b3'
+    //compile group: 'journeymap', name: 'journeymap', version: '5.5.0b3'
     
 
 }
