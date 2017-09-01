@@ -7,6 +7,7 @@ import java.util.Map;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.GuiConfigEntries;
+import net.minecraftforge.fml.common.FMLLog;
 
 public class WPConfiguration {
 
@@ -104,7 +105,8 @@ public class WPConfiguration {
 	}
 
 	public void updateMapSyncTimeStamp() {
-		lastMapSync.set((int) System.currentTimeMillis() / 1000);
+		FMLLog.getLogger().info(System.currentTimeMillis());
+		lastMapSync.set((int) (System.currentTimeMillis() / 1000));
 		saveConfig();
 	}
 

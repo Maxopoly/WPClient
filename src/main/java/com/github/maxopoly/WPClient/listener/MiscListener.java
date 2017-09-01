@@ -49,7 +49,7 @@ public class MiscListener {
 		if (reminded == false) {
 			reminded = true;
 			WPConfiguration config = WPClientForgeMod.getInstance().getConfig();
-			long sinceLastSync = System.currentTimeMillis() - config.getLastMapSync();
+			long sinceLastSync = (System.currentTimeMillis() / 1000) - config.getLastMapSync();
 			if (config.getMapSyncReminderIntervall() != 0
 					&& sinceLastSync > (config.getMapSyncReminderIntervall() * 24 * 60 * 60)) {
 				String msg;

@@ -60,7 +60,7 @@ public class WPClientForgeMod {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		MapDataSyncSession.replaceColorPalette();
+		MapDataSyncSession.deploySettings();
 		config = new WPConfiguration(event.getSuggestedConfigurationFile());
 	}
 

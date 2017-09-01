@@ -151,17 +151,36 @@ public class MapDataSyncSession extends MapDataFileHandler {
 		return "CivClassicsWPClientData";
 	}
 
-	public static void replaceColorPalette() {
-		URL inputUrl = MapDataSyncSession.class.getResource("/colorpalette.json");
+	public static void deploySettings() {
+		URL paletteUrl = MapDataSyncSession.class.getResource("/colorpalette.json");
 		File mcFolder = Minecraft.getMinecraft().mcDataDir;
 		File jmFolder = new File(mcFolder, "journeymap");
-		jmFolder.mkdir();
-		File targetFile = new File(jmFolder, "colorpalette.json");
+		File configFolder = new File(jmFolder, "config");
+		File latestConfigFolder = new File(configFolder, "5.5");
+		latestConfigFolder.mkdirs();
+		File paletteFile = new File(jmFolder, "colorpalette.json");
 		try {
-			FileUtils.copyURLToFile(inputUrl, targetFile);
-		} catch (IOException e) {
-			FMLLog.getLogger().error("Failed to place color palette", e);
-		}
+			FileUtils.copyURLToFile(paletteUrl, paletteFile);
+			copyConfigFile(latestConfigFolder, "journeymap.topo.config", true);
+			copyConfigFile(latestConfigFolder, "journeymap.core.config", true);
+			copyConfigFile(latestConfigFolder, "journeymap.minimap.config", false);
+			copyConfigFile(latestConfigFolder, "journeymap.waypoint.config", false);
+			copyConfigFile(latestConfigFolder, "journeymap.fullmap.config", false);
 
+		} catch (IOException e) {
+			FMLLog.getLogger().error("Failed to place files", e);
+		}
+	}
+
+	private static void copyConfigFile(File folder, String name, boolean overwrite) {
+		URL configUrl = MapDataSyncSession.class.getResource("/" + name);
+		File file = new File(folder, name);
+		if (!file.exists() || overwrite) {
+			try {
+				FileUtils.copyURLToFile(configUrl, file);
+			} catch (IOException e) {
+				FMLLog.getLogger().error("Failed to place files", e);
+			}
+		}
 	}
 }
