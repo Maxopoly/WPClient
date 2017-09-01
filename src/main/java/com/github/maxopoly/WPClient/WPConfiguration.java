@@ -32,15 +32,15 @@ public class WPConfiguration {
 		// ensure exists, not sure if needed
 		forgeConfig.getCategory("JourneyMap");
 
-		String jmSection = "journeymap";
-		String generalSection = "general";
-		String customWayPointSection = "waypoints";
+		String jmSection = "Journeymap";
+		String generalSection = "General";
+		String customWayPointSection = "Waypoints";
 
 		lastMapSync = forgeConfig.get(generalSection, "lastMapSync", 0);
 		lastMapSync.setShowInGui(false);
 
 		connectTestServer = forgeConfig.get(generalSection, "Use test server", false,
-				"Dont use this unless you know what you are doing");
+				"Don't use this unless you know what you are doing");
 
 		itemWayPointDistance = forgeConfig.get(jmSection, "Item waypoint max distance", 0,
 				"Items further away than this number will not show up" + " in item searches. Set to 0 for infinite", 0,
@@ -66,7 +66,7 @@ public class WPConfiguration {
 						+ " a value of 0 will only display live data", 0, 30);
 		hostileWayPointTimer.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
 
-		syncReminderIntervall = forgeConfig.get(generalSection, "Map sync reminder intervall", 7,
+		syncReminderIntervall = forgeConfig.get(generalSection, "Map sync reminder interval", 7,
 				"How often you should be reminded to sync your map data, measured in days. Set to 0 for never", 0, 30);
 		syncReminderIntervall.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
 
