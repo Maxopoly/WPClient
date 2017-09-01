@@ -17,7 +17,6 @@ import journeymap.client.api.IClientAPI;
 import journeymap.client.api.display.Waypoint;
 import journeymap.client.api.display.WaypointGroup;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Logger;
 
 public class WPWayPointHandler {
@@ -53,7 +52,6 @@ public class WPWayPointHandler {
 			scheduler.shutdown();
 		}
 		scheduler = Executors.newScheduledThreadPool(1);
-		FMLLog.getLogger().info("Scheduled with " + ms);
 		scheduler.scheduleWithFixedDelay(new Runnable() {
 
 			@Override
@@ -100,33 +98,23 @@ public class WPWayPointHandler {
 	}
 
 	public synchronized void updateWayPoints() {
-		FMLLog.getLogger().info("Updating");
 		if (mc.thePlayer == null) {
 			return;
 		}
 		WPConfiguration config = WPClientForgeMod.getInstance().getConfig();
 		Location playerLoc = new Location(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
-		FMLLog.getLogger().info("Handling");
 		for (Entry<WPWayPointGroup, Set<Waypoint>> entry : wayPoints.entrySet()) {
-			FMLLog.getLogger().info("Handling " + entry.getKey().toString());
 			boolean hideAll = !config.isWPWayPointVisible(entry.getKey());
 			int maxDistance = config.getMaxWPWayPointDistance(entry.getKey());
 			for (Waypoint point : entry.getValue()) {
-				FMLLog.getLogger().info("Point " + point.getName());
 				Location pointLoc = JourneyMapPlugin.convertPosition(point.getPosition());
 				int distance = playerLoc.distance(pointLoc);
-				FMLLog.getLogger().info("Distance " + distance);
-				FMLLog.getLogger().info(hideAll);
 				if (point.isDisplayed(0)) {
-					FMLLog.getLogger().info("a");
 					if (hideAll || distance > maxDistance) {
-						FMLLog.getLogger().info("Hiding " + point.getName());
 						point.setDisplayed(0, false);
 					}
 				} else {
-					FMLLog.getLogger().info("b");
 					if (maxDistance == 0 || (distance <= maxDistance && !hideAll)) {
-						FMLLog.getLogger().info("Showing " + point.getName());
 						point.setDisplayed(0, true);
 					}
 				}
