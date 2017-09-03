@@ -22,6 +22,7 @@ public class WPConfiguration {
 	private Property syncReminderIntervall;
 	private Map<WPWayPointGroup, Property[]> wayPointGroups;
 	private Property wayPointRefreshRate;
+	private Property showItemWaypointPercentage;
 
 	public WPConfiguration(File file) {
 		forgeConfig = new Configuration(file);
@@ -90,6 +91,9 @@ public class WPConfiguration {
 						+ "displayed/hidden based on how far they are away (in ms)", 200, 5000);
 		wayPointRefreshRate.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
 
+		showItemWaypointPercentage = forgeConfig.get(customWayPointSection, "Show percentages in item waypoints", true,
+				"Allows for sorting by clicking on 'Name' in the JM waypoint list");
+
 		// save default values possibly created
 		saveConfig();
 	}
@@ -156,6 +160,10 @@ public class WPConfiguration {
 
 	public int getMaxItemWayPointTimer() {
 		return itemWayPointTimer.getInt();
+	}
+
+	public boolean showItemWaypointPercentage() {
+		return showItemWaypointPercentage.getBoolean();
 	}
 
 	public Configuration getForgeConfigObject() {

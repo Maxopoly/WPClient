@@ -163,8 +163,10 @@ public class ItemLocationWayPointHandler {
 				color = 0x99ccff;
 			}
 		}
+		boolean showTotalPercentage = WPClientForgeMod.getInstance().getConfig().showItemWaypointPercentage();
 		Waypoint point = new Waypoint(WPClientForgeMod.MODID, ItemUtils.prettifyItemCountWaypointName(item.getID(),
-				itemCount, totalCount, false) + " " + name, 0, new BlockPos(loc.getX(), loc.getY(), loc.getZ()));
+				itemCount, totalCount, showTotalPercentage) + " " + name, 0,
+				new BlockPos(loc.getX(), loc.getY(), loc.getZ()));
 		point.setPersistent(false);
 		point.setColor(color);
 		point.setEditable(false);
