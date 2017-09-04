@@ -90,10 +90,18 @@ public class ItemLocationWayPointHandler {
 			if (chests.size() == 1) {
 				s = "";
 			}
-			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-					"%s[WPC]  %sFound %s%s %sof %s%s %sin %d location%s.", TextFormatting.BLUE, TextFormatting.GRAY,
-					TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum), TextFormatting.GRAY,
-					TextFormatting.WHITE, prettyName, TextFormatting.GRAY, chests.size(), s)));
+			if (sum == 0) {
+				mc.thePlayer.addChatMessage(new TextComponentString(String.format(
+						"%s[WPC]  %sError:  %sCouldn't find any %s%s%s.", TextFormatting.BLUE, TextFormatting.RED,
+						TextFormatting.GRAY, TextFormatting.WHITE, prettyName, TextFormatting.GRAY)));
+			} else {
+				mc.thePlayer.addChatMessage(new TextComponentString(String.format(
+						"%s[WPC]  %sFound %s%s %sof %s%s %sin %d location%s.",
+						TextFormatting.BLUE, TextFormatting.GRAY,
+						TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum),
+						TextFormatting.GRAY, TextFormatting.WHITE, prettyName,
+						TextFormatting.GRAY, chests.size(), s)));
+			}
 		}
 	}
 
