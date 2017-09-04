@@ -44,10 +44,10 @@ public class WPWayPointHandler {
 		this.wayPoints = new HashMap<WPWayPointGroup, Set<Waypoint>>();
 		this.groups = new HashMap<WPWayPointGroup, WaypointGroup>();
 		instance = this;
-		adjustRefreshIntervall(WPClientForgeMod.getInstance().getConfig().getWayPointRefreshRate());
+		adjustRefreshInterval(WPClientForgeMod.getInstance().getConfig().getWayPointRefreshRate());
 	}
 
-	public void adjustRefreshIntervall(long ms) {
+	public void adjustRefreshInterval(long ms) {
 		if (scheduler != null) {
 			scheduler.shutdown();
 		}
@@ -61,7 +61,7 @@ public class WPWayPointHandler {
 					updateWayPoints();
 				} else {
 					refreshRate = configRate;
-					adjustRefreshIntervall(configRate);
+					adjustRefreshInterval(configRate);
 				}
 			}
 		}, ms, ms, TimeUnit.MILLISECONDS);
