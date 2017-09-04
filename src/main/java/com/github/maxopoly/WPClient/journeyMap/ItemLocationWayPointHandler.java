@@ -20,6 +20,7 @@ import journeymap.client.api.display.WaypointGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Logger;
@@ -53,10 +54,11 @@ public class ItemLocationWayPointHandler {
 		hideAll();
 		scheduleRemoval();
 		String prettyName = ItemUtils.getPrettyName(item);
+		ITextComponent msgNoItems = new TextComponentString(String.format(
+				"%s[WPC]  %sCouldn't find any %s%s%s.", TextFormatting.WHITE,
+				TextFormatting.GRAY, TextFormatting.WHITE, prettyName, TextFormatting.GRAY));
 		if (chests.isEmpty() && mc.thePlayer != null) {
-			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-					"%s[WPC]  %sCouldn't find any %s%s%s.", TextFormatting.WHITE,
-					TextFormatting.GRAY, TextFormatting.WHITE, prettyName, TextFormatting.GRAY)));
+			mc.thePlayer.addChatMessage(msgNoItems);
 			return;
 		}
 		int sum = 0;
@@ -91,9 +93,7 @@ public class ItemLocationWayPointHandler {
 				s = "";
 			}
 			if (sum == 0) {
-				mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-						"%s[WPC]  %sCouldn't find any %s%s%s.", TextFormatting.WHITE,
-						TextFormatting.GRAY, TextFormatting.WHITE, prettyName, TextFormatting.GRAY)));
+				mc.thePlayer.addChatMessage(msgNoItems);
 			} else {
 				mc.thePlayer.addChatMessage(new TextComponentString(String.format(
 						"%s[WPC]  %sFound %s%s %sof %s%s %sin %d location%s.",
