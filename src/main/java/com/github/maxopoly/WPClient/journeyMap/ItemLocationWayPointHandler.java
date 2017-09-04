@@ -55,7 +55,7 @@ public class ItemLocationWayPointHandler {
 		String prettyName = ItemUtils.getPrettyName(item);
 		if (chests.isEmpty() && mc.thePlayer != null) {
 			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-					"%s[WPC]  %sError:  %sCouldn't find any %s%s%s.", TextFormatting.BLUE, TextFormatting.RED,
+					"%s[WPC]  %sError:  %sCouldn't find any %s%s%s.", TextFormatting.WHITE, TextFormatting.RED,
 					TextFormatting.GRAY, TextFormatting.WHITE, prettyName, TextFormatting.GRAY)));
 			return;
 		}
@@ -92,12 +92,12 @@ public class ItemLocationWayPointHandler {
 			}
 			if (sum == 0) {
 				mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-						"%s[WPC]  %sError:  %sCouldn't find any %s%s%s.", TextFormatting.BLUE, TextFormatting.RED,
+						"%s[WPC]  %sError:  %sCouldn't find any %s%s%s.", TextFormatting.WHITE, TextFormatting.RED,
 						TextFormatting.GRAY, TextFormatting.WHITE, prettyName, TextFormatting.GRAY)));
 			} else {
 				mc.thePlayer.addChatMessage(new TextComponentString(String.format(
 						"%s[WPC]  %sFound %s%s %sof %s%s %sin %d location%s.",
-						TextFormatting.BLUE, TextFormatting.GRAY,
+						TextFormatting.WHITE, TextFormatting.GRAY,
 						TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum),
 						TextFormatting.GRAY, TextFormatting.WHITE, prettyName,
 						TextFormatting.GRAY, chests.size(), s)));
