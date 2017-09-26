@@ -5,14 +5,15 @@ import com.google.common.cache.Cache;
 import com.google.common.collect.HashBasedTable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import journeymap.client.api.IClientAPI;
 import journeymap.client.api.IClientPlugin;
-import journeymap.client.api.display.Waypoint;
+import journeymap.client.api.display.ModWaypoint;
 import journeymap.client.api.event.ClientEvent;
+import journeymap.client.model.Waypoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLLog;
 
 @journeymap.client.api.ClientPlugin
@@ -23,11 +24,9 @@ public class JourneyMapPlugin implements IClientPlugin {
 	@Override
 	public void initialize(IClientAPI jmClientApi) {
 		jmAPI = jmClientApi;
-		PlayerLocationWaypointHandler handler = new PlayerLocationWaypointHandler(jmAPI, FMLLog.getLogger(),
-				Minecraft.getMinecraft());
+		new PlayerLocationWaypointHandler(jmAPI, FMLLog.getLogger(), Minecraft.getMinecraft());
 		new ItemLocationWayPointHandler(jmAPI, FMLLog.getLogger(), Minecraft.getMinecraft());
 		new WPWayPointHandler(jmClientApi, FMLLog.getLogger(), Minecraft.getMinecraft());
-		MinecraftForge.EVENT_BUS.register(handler);
 	}
 
 	@Override
@@ -35,7 +34,7 @@ public class JourneyMapPlugin implements IClientPlugin {
 		return "wpclient";
 	}
 
-	public static void dirtyWayPointRemoval(Waypoint modWaypoint) {
+	public static void dirtyWayPointRemoval(ModWaypoint modWaypoint) {
 		try {
 			Method getPluginMethod = jmAPI.getClass().getDeclaredMethod("getPlugin", String.class);
 			getPluginMethod.setAccessible(true);
@@ -45,7 +44,7 @@ public class JourneyMapPlugin implements IClientPlugin {
 			@SuppressWarnings("unchecked")
 			HashBasedTable<Object, Object, Object> wayPoints = (HashBasedTable<Object, Object, Object>) wayPointTable
 					.get(pluginWrapper);
-			Object wayPoint = wayPoints.remove(modWaypoint.getId(), modWaypoint);
+			Object wayPoint = wayPoints.remove(modWaypoint.getDisplayId(), modWaypoint);
 			if (wayPoint == null) {
 				Class<?> wayPointClass = Class.forName("journeymap.client.model.Waypoint");
 				Constructor<?> wayPointConstructor = wayPointClass.getConstructor(Waypoint.class);
@@ -66,6 +65,8 @@ public class JourneyMapPlugin implements IClientPlugin {
 			Field drawStepsUpdateNeededField = jmAPI.getClass().getDeclaredField("drawStepsUpdateNeeded");
 			drawStepsUpdateNeededField.setAccessible(true);
 			drawStepsUpdateNeededField.set(jmAPI, true);
+		} catch (InvocationTargetException e) {
+			FMLLog.getLogger().error("Couldnt delete JM waypoint, ivoke", e.getCause());
 		} catch (Exception e) {
 			FMLLog.getLogger().error("Couldnt delete JM waypoint", e);
 		}

@@ -2,7 +2,6 @@ package com.github.maxopoly.WPClient.connection;
 
 import com.github.maxopoly.WPClient.packetHandling.ClientSideMapDataCompletionPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.ClientSideMapDataPacketHandler;
-import com.github.maxopoly.WPClient.packetHandling.CrashHandler;
 import com.github.maxopoly.WPClient.packetHandling.InvalidateAllPlayerInfoPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.InvalidateSinglePlayerInfoPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.ItemLocationPacketHandler;
@@ -27,7 +26,7 @@ public class ClientSidePacketForwarder extends IncomingDataHandler {
 		jsonHandler.registerHandler(new PlayerInformationPacketHandler());
 		jsonHandler.registerHandler(new PlayerLocationUpdatePacketHandler());
 		jsonHandler.registerHandler(new ItemLocationPacketHandler());
-		jsonHandler.registerHandler(new CrashHandler());
+		// jsonHandler.registerHandler(new CrashHandler());
 		jsonHandler.registerHandler(new MapDataRequestPacketHandler());
 		jsonHandler.registerHandler(new ClientSideMapDataCompletionPacketHandler());
 		jsonHandler.registerHandler(new InvalidateAllPlayerInfoPacketHandler());

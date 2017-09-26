@@ -17,7 +17,7 @@ public class PlayerLocationPacket extends AbstractJsonPacket {
 
 	@Override
 	public PacketIndex getPacket() {
-		return PacketIndex.PlayerLocationPush;
+		return PacketIndex.PlayerLocationPull;
 	}
 
 	@Override

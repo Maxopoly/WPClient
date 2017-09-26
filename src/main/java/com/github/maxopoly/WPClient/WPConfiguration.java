@@ -1,5 +1,6 @@
 package com.github.maxopoly.WPClient;
 
+import com.github.maxopoly.WPClient.journeyMap.WPWayPointHandler;
 import com.github.maxopoly.WPCommon.model.WPWayPointGroup;
 import java.io.File;
 import java.util.HashMap;
@@ -89,6 +90,9 @@ public class WPConfiguration {
 				"How often waypoints are refreshed to check whether they should be "
 						+ "displayed/hidden based on how far they are away (in ms)", 200, 5000);
 		wayPointRefreshRate.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+		if (WPWayPointHandler.getInstance() != null) {
+			WPWayPointHandler.getInstance().adjustRefreshIntervall(wayPointRefreshRate.getInt());
+		}
 
 		// save default values possibly created
 		saveConfig();

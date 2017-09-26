@@ -15,9 +15,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import journeymap.client.api.IClientAPI;
-import journeymap.client.api.display.Waypoint;
-import journeymap.client.api.display.WaypointGroup;
+import journeymap.client.api.display.ModWaypoint;
+import journeymap.client.api.model.MapImage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -28,9 +30,9 @@ public class ItemLocationWayPointHandler {
 
 	private static ItemLocationWayPointHandler instance;
 
-	private Set<Waypoint> points;
+	private Set<ModWaypoint> points;
 	private ScheduledExecutorService cleanUpExec;
-	private WaypointGroup group;
+	private MapImage icon;
 
 	public static ItemLocationWayPointHandler getInstance() {
 		return instance;
@@ -44,9 +46,9 @@ public class ItemLocationWayPointHandler {
 		this.jmAPI = jmAPI;
 		this.logger = logger;
 		this.mc = mc;
-		this.points = new HashSet<Waypoint>();
-		this.group = new WaypointGroup(WPClientForgeMod.MODID, "items");
+		this.points = new HashSet<ModWaypoint>();
 		instance = this;
+		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16).setAnchorY(16);
 	}
 
 	public synchronized void markLocations(WPItem item, List<Chest> chests) {
@@ -99,11 +101,14 @@ public class ItemLocationWayPointHandler {
 
 	public boolean isLocationValid(Location loc) {
 		World world = Minecraft.getMinecraft().theWorld;
-		if (world == null) {
+		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+		if (world == null || player == null) {
 			return true;
 		}
+		Location playerLoc = new Location(player.posX, player.posY, player.posZ);
 		BlockPos pos = JourneyMapPlugin.convertPosition(loc);
-		if (world.isBlockLoaded(pos)) {
+		if (loc.distance(playerLoc) < 32) {
+			// must be loaded
 			int id = ChestContentListener.getBlockID(pos);
 			// chest or obfuscated
 			if (ChestContentListener.isChest(id)) {
@@ -137,8 +142,9 @@ public class ItemLocationWayPointHandler {
 	}
 
 	public synchronized void hideAll() {
-		for (Waypoint point : points) {
+		for (ModWaypoint point : points) {
 			JourneyMapPlugin.dirtyWayPointRemoval(point);
+			// jmAPI.remove(point);
 		}
 		points.clear();
 	}
@@ -163,12 +169,12 @@ public class ItemLocationWayPointHandler {
 				color = 0x99ccff;
 			}
 		}
-		Waypoint point = new Waypoint(WPClientForgeMod.MODID, ItemUtils.prettifyItemCountWaypointName(item.getID(),
-				itemCount, totalCount, false) + " " + name, 0, new BlockPos(loc.getX(), loc.getY(), loc.getZ()));
+		ModWaypoint point = new ModWaypoint(WPClientForgeMod.MODID, loc.toString() + ";;WPC", "items",
+				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount, totalCount, false) + " " + name, new BlockPos(
+						loc.getX(), loc.getY(), loc.getZ()), icon, color, false, 0);
 		point.setPersistent(false);
 		point.setColor(color);
 		point.setEditable(false);
-		point.setGroup(group);
 		points.add(point);
 		try {
 			jmAPI.show(point);

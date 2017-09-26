@@ -14,9 +14,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import journeymap.client.api.IClientAPI;
-import journeymap.client.api.display.Waypoint;
-import journeymap.client.api.display.WaypointGroup;
+import journeymap.client.api.display.ModWaypoint;
+import journeymap.client.api.model.MapImage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.Logger;
 
 public class WPWayPointHandler {
@@ -31,9 +32,9 @@ public class WPWayPointHandler {
 	private Logger logger;
 	private Minecraft mc;
 
-	private Map<WPWayPointGroup, Set<Waypoint>> wayPoints;
-	private Map<WPWayPointGroup, WaypointGroup> groups;
+	private Map<WPWayPointGroup, Set<ModWaypoint>> wayPoints;
 	private int refreshRate;
+	private MapImage icon;
 
 	private ScheduledExecutorService scheduler;
 
@@ -41,10 +42,11 @@ public class WPWayPointHandler {
 		this.jmAPI = jmAPI;
 		this.logger = logger;
 		this.mc = mc;
-		this.wayPoints = new HashMap<WPWayPointGroup, Set<Waypoint>>();
-		this.groups = new HashMap<WPWayPointGroup, WaypointGroup>();
+		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16).setAnchorY(16);
+		this.wayPoints = new HashMap<WPWayPointGroup, Set<ModWaypoint>>();
 		instance = this;
-		adjustRefreshIntervall(WPClientForgeMod.getInstance().getConfig().getWayPointRefreshRate());
+		this.refreshRate = 1000;
+		adjustRefreshIntervall(refreshRate);
 	}
 
 	public void adjustRefreshIntervall(long ms) {
@@ -56,7 +58,9 @@ public class WPWayPointHandler {
 
 			@Override
 			public void run() {
-				int configRate = WPClientForgeMod.getInstance().getConfig().getWayPointRefreshRate();
+				int configRate = WPClientForgeMod.getInstance() != null && WPClientForgeMod.getInstance().getConfig() != null ? WPClientForgeMod
+						.getInstance().getConfig().getWayPointRefreshRate()
+						: refreshRate;
 				if (configRate == refreshRate) {
 					updateWayPoints();
 				} else {
@@ -68,30 +72,25 @@ public class WPWayPointHandler {
 	}
 
 	public synchronized void overwriteWayPoints(Set<WPWayPoint> providedPoints) {
-		for (Set<Waypoint> points : wayPoints.values()) {
-			for (Waypoint point : points) {
+		for (Set<ModWaypoint> points : wayPoints.values()) {
+			for (ModWaypoint point : points) {
 				JourneyMapPlugin.dirtyWayPointRemoval(point);
+				// jmAPI.remove(point);
 			}
 			points.clear();
 		}
+		int i = 0;
 		for (WPWayPoint point : providedPoints) {
-			Set<Waypoint> groupSet = wayPoints.get(point.getGroup());
+			Set<ModWaypoint> groupSet = wayPoints.get(point.getGroup());
 			if (groupSet == null) {
-				groupSet = new HashSet<Waypoint>();
+				groupSet = new HashSet<ModWaypoint>();
 				wayPoints.put(point.getGroup(), groupSet);
 			}
-			Waypoint jmPoint = new Waypoint(WPClientForgeMod.MODID, point.getName(), 0,
-					JourneyMapPlugin.convertPosition(point.getLocation()));
-			WaypointGroup group = groups.get(point.getGroup());
-			if (group == null) {
-				group = new WaypointGroup(WPClientForgeMod.MODID, point.getGroup().name());
-				groups.put(point.getGroup(), group);
-			}
-			jmPoint.setGroup(group);
+			ModWaypoint jmPoint = new ModWaypoint(WPClientForgeMod.MODID, "WPPoints" + (i++), "wpShared", point.getName(),
+					JourneyMapPlugin.convertPosition(point.getLocation()), icon, point.getColor(), false, 0);
 			jmPoint.setColor(point.getColor());
 			jmPoint.setEditable(false);
 			jmPoint.setPersistent(false);
-			jmPoint.setDisplayed(0, false);
 			groupSet.add(jmPoint);
 		}
 		updateWayPoints();
@@ -103,19 +102,21 @@ public class WPWayPointHandler {
 		}
 		WPConfiguration config = WPClientForgeMod.getInstance().getConfig();
 		Location playerLoc = new Location(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
-		for (Entry<WPWayPointGroup, Set<Waypoint>> entry : wayPoints.entrySet()) {
+		for (Entry<WPWayPointGroup, Set<ModWaypoint>> entry : wayPoints.entrySet()) {
 			boolean hideAll = !config.isWPWayPointVisible(entry.getKey());
 			int maxDistance = config.getMaxWPWayPointDistance(entry.getKey());
-			for (Waypoint point : entry.getValue()) {
-				Location pointLoc = JourneyMapPlugin.convertPosition(point.getPosition());
+			for (ModWaypoint point : entry.getValue()) {
+				Location pointLoc = JourneyMapPlugin.convertPosition(point.getPoint());
 				int distance = playerLoc.distance(pointLoc);
-				if (point.isDisplayed(0)) {
-					if (hideAll || distance > maxDistance) {
-						point.setDisplayed(0, false);
+				if (point.getDimensions()[0] == 0) {
+					if (hideAll || (distance > maxDistance && maxDistance != 0)) {
+						JourneyMapPlugin.dirtyWayPointRemoval(point);
+						point.setDimensions(55);
+						continue;
 					}
 				} else {
-					if (maxDistance == 0 || (distance <= maxDistance && !hideAll)) {
-						point.setDisplayed(0, true);
+					if ((maxDistance == 0 || distance <= maxDistance) && !hideAll) {
+						point.setDimensions(0);
 					}
 				}
 				try {

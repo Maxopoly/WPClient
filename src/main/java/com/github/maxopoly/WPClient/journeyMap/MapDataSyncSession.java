@@ -128,8 +128,8 @@ public class MapDataSyncSession extends MapDataFileHandler {
 	public void handleReceivedTile(WPMappingTile tile) {
 		incrementReturnFileCounter();
 		saveTile(tile);
-		cachedTiles.put(tile.getCoords(), new WPMappingTile(tile.getTimeStamp(), tile.getCoords().getX(), tile
-				.getCoords().getZ(), tile.getHash()));
+		cachedTiles.put(tile.getCoords(), new WPMappingTile(tile.getTimeStamp(), tile.getCoords().getX(), tile.getCoords()
+				.getZ(), tile.getHash()));
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class MapDataSyncSession extends MapDataFileHandler {
 		File mcFolder = Minecraft.getMinecraft().mcDataDir;
 		File jmFolder = new File(mcFolder, "journeymap");
 		File configFolder = new File(jmFolder, "config");
-		File latestConfigFolder = new File(configFolder, "5.5");
+		File latestConfigFolder = new File(configFolder, "5.4");
 		latestConfigFolder.mkdirs();
 		File paletteFile = new File(jmFolder, "colorpalette.json");
 		try {
