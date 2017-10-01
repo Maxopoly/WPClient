@@ -10,6 +10,7 @@ import com.github.maxopoly.WPClient.packetHandling.MapDataRequestPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.PlayerInformationPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.PlayerLocationUpdatePacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.WPWayPointPacketHandler;
+import com.github.maxopoly.WPCommon.model.permission.PermissionLevelManagement;
 import com.github.maxopoly.WPCommon.packetHandling.incoming.BinaryDataForwarder;
 import com.github.maxopoly.WPCommon.packetHandling.incoming.IncomingDataHandler;
 import com.github.maxopoly.WPCommon.packetHandling.incoming.JSONPacketForwarder;
@@ -21,7 +22,8 @@ public class ClientSidePacketForwarder extends IncomingDataHandler {
 
 	public ClientSidePacketForwarder(Logger logger, DataInputStream input, AES_CFB8_Encrypter encrypter,
 			Runnable failureCallback) {
-		super(logger, input, encrypter, failureCallback);
+		// accept all incoming data
+		super(logger, input, encrypter, failureCallback, PermissionLevelManagement.getPermissionLevel(1));
 		JSONPacketForwarder jsonHandler = new JSONPacketForwarder(logger);
 		jsonHandler.registerHandler(new PlayerInformationPacketHandler());
 		jsonHandler.registerHandler(new PlayerLocationUpdatePacketHandler());

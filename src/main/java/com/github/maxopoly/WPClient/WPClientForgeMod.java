@@ -144,7 +144,7 @@ public class WPClientForgeMod {
 	}
 
 	private void sendPlayerLocations() {
-		if (!connectedToCivClassics() || !connection.isInitialized()) {
+		if (!isConnectionReady()) {
 			return;
 		}
 		LocationTracker tracker = LocationTracker.getInstance();

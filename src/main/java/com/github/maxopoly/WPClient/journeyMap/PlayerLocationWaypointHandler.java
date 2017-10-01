@@ -12,9 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import journeymap.client.api.IClientAPI;
 import journeymap.client.api.display.ModWaypoint;
 import journeymap.client.api.model.MapImage;
@@ -24,6 +21,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import org.apache.logging.log4j.Logger;
 
 public class PlayerLocationWaypointHandler {
@@ -43,14 +43,12 @@ public class PlayerLocationWaypointHandler {
 		this.jmAPI = jmAPI;
 		this.logger = logger;
 		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16).setAnchorY(16);
-		ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
-		exec.scheduleAtFixedRate(new Runnable() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
 
-			@Override
-			public void run() {
-				markPlayerLocations();
-			}
-		}, 50, 50, TimeUnit.MILLISECONDS);
+	@SubscribeEvent
+	public void onTick(ClientTickEvent e) {
+		markPlayerLocations();
 	}
 
 	public ModWaypoint createPlayerWaypoint(String playerName, Location loc) {
@@ -148,6 +146,7 @@ public class PlayerLocationWaypointHandler {
 				}
 				timeout *= (60 * 1000);
 				timeout = Math.max(timeout, timerStartMilliSeconds);
+				logger.info("Timeout: " + timeout);
 				if (sinceLastSeen > timeout) {
 					JourneyMapPlugin.dirtyWayPointRemoval(wayPoint);
 					// jmAPI.remove(wayPoint);
@@ -158,8 +157,7 @@ public class PlayerLocationWaypointHandler {
 				wayPoint.setWaypointName(newName);
 				wayPoint.setColor(color);
 				try {
-					JourneyMapPlugin.dirtyWayPointRemoval(wayPoint);
-					// jmAPI.show(wayPoint);
+					jmAPI.show(wayPoint);
 				} catch (Exception e) {
 					logger.error("Failed to update waypoint", e);
 				}

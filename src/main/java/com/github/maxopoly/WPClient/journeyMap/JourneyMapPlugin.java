@@ -11,7 +11,6 @@ import journeymap.client.api.IClientAPI;
 import journeymap.client.api.IClientPlugin;
 import journeymap.client.api.display.ModWaypoint;
 import journeymap.client.api.event.ClientEvent;
-import journeymap.client.model.Waypoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLLog;
@@ -47,7 +46,7 @@ public class JourneyMapPlugin implements IClientPlugin {
 			Object wayPoint = wayPoints.remove(modWaypoint.getDisplayId(), modWaypoint);
 			if (wayPoint == null) {
 				Class<?> wayPointClass = Class.forName("journeymap.client.model.Waypoint");
-				Constructor<?> wayPointConstructor = wayPointClass.getConstructor(Waypoint.class);
+				Constructor<?> wayPointConstructor = wayPointClass.getConstructor(ModWaypoint.class);
 				wayPoint = wayPointConstructor.newInstance(modWaypoint);
 			}
 			Method getIDMethod = wayPoint.getClass().getDeclaredMethod("getId");
