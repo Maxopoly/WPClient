@@ -50,8 +50,8 @@ public class MiscListener {
 			reminded = true;
 			WPConfiguration config = WPClientForgeMod.getInstance().getConfig();
 			long sinceLastSync = (System.currentTimeMillis() / 1000) - config.getLastMapSync();
-			if (config.getMapSyncReminderIntervall() != 0
-					&& sinceLastSync > (config.getMapSyncReminderIntervall() * 24 * 60 * 60)) {
+			if (config.getMapSyncReminderInterval() != 0
+					&& sinceLastSync > (config.getMapSyncReminderInterval() * 24 * 60 * 60)) {
 				String msg;
 				if (config.getLastMapSync() == 0) {
 					msg = "You have never";

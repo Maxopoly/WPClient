@@ -20,9 +20,10 @@ public class WPConfiguration {
 	private Property neutWayPointTimer;
 	private Property hostileWayPointTimer;
 	private Property connectTestServer;
-	private Property syncReminderIntervall;
+	private Property syncReminderInterval;
 	private Map<WPWayPointGroup, Property[]> wayPointGroups;
 	private Property wayPointRefreshRate;
+	private Property showItemWaypointPercentage;
 
 	public WPConfiguration(File file) {
 		forgeConfig = new Configuration(file);
@@ -68,9 +69,9 @@ public class WPConfiguration {
 						+ " a value of 0 will only display live data", 0, 30);
 		hostileWayPointTimer.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
 
-		syncReminderIntervall = forgeConfig.get(generalSection, "Map sync reminder interval", 7,
+		syncReminderInterval = forgeConfig.get(generalSection, "Map sync reminder interval", 7,
 				"How often you should be reminded to sync your map data, measured in days. Set to 0 for never", 0, 30);
-		syncReminderIntervall.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+		syncReminderInterval.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
 
 		wayPointGroups = new HashMap<WPWayPointGroup, Property[]>();
 		for (WPWayPointGroup pointGroup : WPWayPointGroup.values()) {
@@ -93,6 +94,9 @@ public class WPConfiguration {
 		if (WPWayPointHandler.getInstance() != null) {
 			WPWayPointHandler.getInstance().adjustRefreshIntervall(wayPointRefreshRate.getInt());
 		}
+
+		showItemWaypointPercentage = forgeConfig.get(customWayPointSection, "Show percentages in item waypoints", true,
+				"Allows for sorting by clicking on 'Name' in the JM waypoint list");
 
 		// save default values possibly created
 		saveConfig();
@@ -138,8 +142,8 @@ public class WPConfiguration {
 		return itemWayPointDistance.getInt();
 	}
 
-	public int getMapSyncReminderIntervall() {
-		return syncReminderIntervall.getInt();
+	public int getMapSyncReminderInterval() {
+		return syncReminderInterval.getInt();
 	}
 
 	public int getMaxAllyTimer() {
@@ -160,6 +164,10 @@ public class WPConfiguration {
 
 	public int getMaxItemWayPointTimer() {
 		return itemWayPointTimer.getInt();
+	}
+
+	public boolean showItemWaypointPercentage() {
+		return showItemWaypointPercentage.getBoolean();
 	}
 
 	public Configuration getForgeConfigObject() {

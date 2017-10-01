@@ -21,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -55,10 +56,10 @@ public class ItemLocationWayPointHandler {
 		hideAll();
 		scheduleRemoval();
 		String prettyName = ItemUtils.getPrettyName(item);
+		ITextComponent msgNoItems = new TextComponentString(String.format("%s[WPC]  %sCouldn't find any %s%s%s.",
+				TextFormatting.WHITE, TextFormatting.GRAY, TextFormatting.WHITE, prettyName, TextFormatting.GRAY));
 		if (chests.isEmpty() && mc.thePlayer != null) {
-			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-					"%s[WPC]  %sError:  %sCouldn't find any %s%s%s.", TextFormatting.BLUE, TextFormatting.RED,
-					TextFormatting.GRAY, TextFormatting.WHITE, prettyName, TextFormatting.GRAY)));
+			mc.thePlayer.addChatMessage(msgNoItems);
 			return;
 		}
 		int sum = 0;
@@ -92,10 +93,14 @@ public class ItemLocationWayPointHandler {
 			if (chests.size() == 1) {
 				s = "";
 			}
-			mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-					"%s[WPC]  %sFound %s%s %sof %s%s %sin %d location%s.", TextFormatting.BLUE, TextFormatting.GRAY,
-					TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum), TextFormatting.GRAY,
-					TextFormatting.WHITE, prettyName, TextFormatting.GRAY, chests.size(), s)));
+			if (sum == 0) {
+				mc.thePlayer.addChatMessage(msgNoItems);
+			} else {
+				mc.thePlayer.addChatMessage(new TextComponentString(String.format(
+						"%s[WPC]  %sFound %s%s %sof %s%s %sin %d location%s.", TextFormatting.WHITE, TextFormatting.GRAY,
+						TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum), TextFormatting.GRAY,
+						TextFormatting.WHITE, prettyName, TextFormatting.GRAY, chests.size(), s)));
+			}
 		}
 	}
 
@@ -169,9 +174,10 @@ public class ItemLocationWayPointHandler {
 				color = 0x99ccff;
 			}
 		}
+		boolean showTotalPercentage = WPClientForgeMod.getInstance().getConfig().showItemWaypointPercentage();
 		ModWaypoint point = new ModWaypoint(WPClientForgeMod.MODID, loc.toString() + ";;WPC", "items",
-				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount, totalCount, false) + " " + name, new BlockPos(
-						loc.getX(), loc.getY(), loc.getZ()), icon, color, false, 0);
+				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount, totalCount, showTotalPercentage) + " " + name,
+				new BlockPos(loc.getX(), loc.getY(), loc.getZ()), icon, color, false, 0);
 		point.setPersistent(false);
 		point.setColor(color);
 		point.setEditable(false);
