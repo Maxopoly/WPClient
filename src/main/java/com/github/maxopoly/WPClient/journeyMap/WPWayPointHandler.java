@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import journeymap.client.api.IClientAPI;
 import journeymap.client.api.display.ModWaypoint;
 import journeymap.client.api.model.MapImage;
 import net.minecraft.client.Minecraft;
@@ -28,7 +27,6 @@ public class WPWayPointHandler {
 		return instance;
 	}
 
-	private IClientAPI jmAPI;
 	private Logger logger;
 	private Minecraft mc;
 
@@ -38,11 +36,11 @@ public class WPWayPointHandler {
 
 	private ScheduledExecutorService scheduler;
 
-	WPWayPointHandler(IClientAPI jmAPI, Logger logger, Minecraft mc) {
-		this.jmAPI = jmAPI;
+	WPWayPointHandler(Logger logger, Minecraft mc) {
 		this.logger = logger;
 		this.mc = mc;
-		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16).setAnchorY(16);
+		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16)
+				.setAnchorY(16);
 		this.wayPoints = new HashMap<WPWayPointGroup, Set<ModWaypoint>>();
 		instance = this;
 		this.refreshRate = 1000;
@@ -58,9 +56,9 @@ public class WPWayPointHandler {
 
 			@Override
 			public void run() {
-				int configRate = WPClientForgeMod.getInstance() != null && WPClientForgeMod.getInstance().getConfig() != null ? WPClientForgeMod
-						.getInstance().getConfig().getWayPointRefreshRate()
-						: refreshRate;
+				int configRate = WPClientForgeMod.getInstance() != null
+						&& WPClientForgeMod.getInstance().getConfig() != null ? WPClientForgeMod.getInstance()
+						.getConfig().getWayPointRefreshRate() : refreshRate;
 				if (configRate == refreshRate) {
 					updateWayPoints();
 				} else {
@@ -86,8 +84,9 @@ public class WPWayPointHandler {
 				groupSet = new HashSet<ModWaypoint>();
 				wayPoints.put(point.getGroup(), groupSet);
 			}
-			ModWaypoint jmPoint = new ModWaypoint(WPClientForgeMod.MODID, "WPPoints" + (i++), "wpShared", point.getName(),
-					JourneyMapPlugin.convertPosition(point.getLocation()), icon, point.getColor(), false, 0);
+			ModWaypoint jmPoint = new ModWaypoint(WPClientForgeMod.MODID, "WPPoints" + (i++), "wpShared",
+					point.getName(), JourneyMapPlugin.convertPosition(point.getLocation()), icon, point.getColor(),
+					false, 0);
 			jmPoint.setColor(point.getColor());
 			jmPoint.setEditable(false);
 			jmPoint.setPersistent(false);
@@ -120,7 +119,7 @@ public class WPWayPointHandler {
 					}
 				}
 				try {
-					jmAPI.show(point);
+					JourneyMapPlugin.queueWayPointToShow(point);
 				} catch (Exception e) {
 					logger.error("Failed to update waypoint", e);
 				}

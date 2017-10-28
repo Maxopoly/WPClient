@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import journeymap.client.api.IClientAPI;
+import java.util.regex.Pattern;
 import journeymap.client.api.display.ModWaypoint;
 import journeymap.client.api.model.MapImage;
 import net.minecraft.client.Minecraft;
@@ -25,24 +25,28 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import org.apache.logging.log4j.Logger;
+import scala.util.Random;
 
 public class PlayerLocationWaypointHandler {
 
 	// after this time waypoints will show when the location was last reported
 	private static final int timerStartMilliSeconds = 5000;
+	private static final String[] alphabet = new String[] { "Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot",
+			"Golf", "Hotel", "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo",
+			"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "Xray", "Yankee", "Zulu" };
+	private static final Pattern barCodeRegex = Pattern.compile("[l|1|I]+");
 
 	private Map<String, ModWaypoint> existingWaypoints;
-	private IClientAPI jmAPI;
 	private Logger logger;
 	private Minecraft mc;
 	private MapImage icon;
 
-	PlayerLocationWaypointHandler(IClientAPI jmAPI, Logger logger, Minecraft mc) {
+	PlayerLocationWaypointHandler(Logger logger, Minecraft mc) {
 		this.existingWaypoints = new HashMap<String, ModWaypoint>();
 		this.mc = mc;
-		this.jmAPI = jmAPI;
 		this.logger = logger;
-		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16).setAnchorY(16);
+		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16)
+				.setAnchorY(16);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -76,7 +80,7 @@ public class PlayerLocationWaypointHandler {
 			existingWaypoints.put(playerName, point);
 		}
 		try {
-			jmAPI.show(point);
+			JourneyMapPlugin.queueWayPointToShow(point);
 		} catch (Exception e) {
 			logger.error("Failed to add waypoint", e);
 		}
@@ -146,7 +150,6 @@ public class PlayerLocationWaypointHandler {
 				}
 				timeout *= (60 * 1000);
 				timeout = Math.max(timeout, timerStartMilliSeconds);
-				logger.info("Timeout: " + timeout);
 				if (sinceLastSeen > timeout) {
 					JourneyMapPlugin.dirtyWayPointRemoval(wayPoint);
 					// jmAPI.remove(wayPoint);
@@ -157,7 +160,7 @@ public class PlayerLocationWaypointHandler {
 				wayPoint.setWaypointName(newName);
 				wayPoint.setColor(color);
 				try {
-					jmAPI.show(wayPoint);
+					JourneyMapPlugin.queueWayPointToShow(wayPoint);
 				} catch (Exception e) {
 					logger.error("Failed to update waypoint", e);
 				}
@@ -165,11 +168,27 @@ public class PlayerLocationWaypointHandler {
 		}
 	}
 
-	private String constructPlayerInfoString(String accName, Player player) {
+	private static String constructPlayerInfoString(String accName, Player player) {
+		if (isBarCode(accName)) {
+			accName = barCodeDeobfuscate(accName);
+		}
 		if (player != null && !player.getMain().getName().equals(accName)) {
 			return accName + " (" + player.getMain().getName() + ")";
 		}
 		return accName;
+	}
+
+	public static String barCodeDeobfuscate(String barcodeName) {
+		StringBuilder sb = new StringBuilder();
+		Random rng = new Random(barcodeName.hashCode());
+		for (int i = 0; i < 3; i++) {
+			sb.append(alphabet[rng.nextInt(alphabet.length)]);
+		}
+		return sb.toString();
+	}
+
+	public static boolean isBarCode(String name) {
+		return barCodeRegex.matcher(name).matches();
 	}
 
 	private String constructTimeString(long millis) {

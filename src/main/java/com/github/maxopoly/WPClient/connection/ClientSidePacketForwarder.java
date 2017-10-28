@@ -7,6 +7,7 @@ import com.github.maxopoly.WPClient.packetHandling.InvalidateSinglePlayerInfoPac
 import com.github.maxopoly.WPClient.packetHandling.ItemLocationPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.LoginSuccessPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.MapDataRequestPacketHandler;
+import com.github.maxopoly.WPClient.packetHandling.PermissionUpdatePacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.PlayerInformationPacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.PlayerLocationUpdatePacketHandler;
 import com.github.maxopoly.WPClient.packetHandling.WPWayPointPacketHandler;
@@ -35,6 +36,7 @@ public class ClientSidePacketForwarder extends IncomingDataHandler {
 		jsonHandler.registerHandler(new InvalidateSinglePlayerInfoPacketHandler());
 		jsonHandler.registerHandler(new LoginSuccessPacketHandler());
 		jsonHandler.registerHandler(new WPWayPointPacketHandler());
+		jsonHandler.registerHandler(new PermissionUpdatePacketHandler());
 		BinaryDataForwarder binaryHandler = new BinaryDataForwarder(logger);
 		binaryHandler.registerHandler(new ClientSideMapDataPacketHandler());
 		registerHandler(jsonHandler);

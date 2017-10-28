@@ -8,11 +8,13 @@ import com.github.maxopoly.WPClient.listener.JEI_GUI_Listener;
 import com.github.maxopoly.WPClient.listener.MainMenuGUIListener;
 import com.github.maxopoly.WPClient.listener.MiscListener;
 import com.github.maxopoly.WPClient.listener.PlayerProximityListener;
+import com.github.maxopoly.WPClient.listener.SkyNetListener;
 import com.github.maxopoly.WPClient.listener.SnitchHitHandler;
 import com.github.maxopoly.WPClient.packetCreation.PlayerLocationPacket;
 import com.github.maxopoly.WPClient.session.SessionManager;
 import com.github.maxopoly.WPCommon.model.LocationTracker;
 import com.github.maxopoly.WPCommon.model.LoggedPlayerLocation;
+import com.github.maxopoly.WPCommon.model.permission.PermissionLevel;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,13 +33,14 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = WPClientForgeMod.MODID, version = WPClientForgeMod.VERSION, guiFactory = "com.github.maxopoly.WPClient.gui.WPConfigGuiFactory")
 public class WPClientForgeMod {
 	public static final String MODID = "wpclient";
-	public static final String VERSION = "1.1";
+	public static final String VERSION = "1.2";
 
 	private static WPClientForgeMod instance;
 
 	private Minecraft mc;
 	private ServerConnection connection;
 	private SessionManager sessionManager;
+	private PermissionLevel perm;
 	private Logger logger;
 	private boolean enabled;
 	private WPConfiguration config;
@@ -60,23 +63,26 @@ public class WPClientForgeMod {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		instance = this;
 		MapDataSyncSession.deploySettings();
 		config = new WPConfiguration(event.getSuggestedConfigurationFile());
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		instance = this;
 		mc = Minecraft.getMinecraft();
 		logger = FMLLog.getLogger();
 		logger.info("Enabling WPClient");
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new SnitchHitHandler(logger));
-		MinecraftForge.EVENT_BUS.register(new JEI_GUI_Listener());
+		if (net.minecraftforge.fml.common.Loader.isModLoaded("JEI")) {
+			MinecraftForge.EVENT_BUS.register(new JEI_GUI_Listener());
+		}
 		MinecraftForge.EVENT_BUS.register(new ChestContentListener());
 		MinecraftForge.EVENT_BUS.register(new MainMenuGUIListener());
 		MinecraftForge.EVENT_BUS.register(new PlayerProximityListener());
 		MinecraftForge.EVENT_BUS.register(new IngameGUIListener());
+		MinecraftForge.EVENT_BUS.register(new SkyNetListener());
 		MinecraftForge.EVENT_BUS.register(new MiscListener("mc.civclassic.com"));
 
 		sessionManager = new SessionManager(mc, logger);
@@ -158,6 +164,14 @@ public class WPClientForgeMod {
 		}
 		PlayerLocationPacket updatePacket = new PlayerLocationPacket(players);
 		connection.sendMessage(updatePacket);
+	}
+
+	public PermissionLevel getPermissionLevel() {
+		return perm;
+	}
+
+	public void setPermissionLevel(PermissionLevel perm) {
+		this.perm = perm;
 	}
 
 }

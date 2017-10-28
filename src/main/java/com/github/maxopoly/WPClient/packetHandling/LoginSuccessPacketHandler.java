@@ -23,8 +23,8 @@ public class LoginSuccessPacketHandler implements JSONPacketHandler {
 			MessageHandler.getInstance().queueMessage(
 					new TextComponentString(
 							"[WPC] You are running an outdated version. It may no longer work properly,"
-									+ " asking Max for a newer version is highly recommended. Your version: " + version
-									+ ", latest: " + WPStatics.protocolVersion));
+									+ " asking Max for a newer version is highly recommended. Your version: 1."
+									+ WPStatics.protocolVersion + ", latest: 1." + version));
 		}
 	}
 

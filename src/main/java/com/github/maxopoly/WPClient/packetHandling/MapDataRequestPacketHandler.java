@@ -24,8 +24,7 @@ public class MapDataRequestPacketHandler implements JSONPacketHandler {
 			return;
 		}
 		session.setStatus("Uploading map data requested by server");
-		int expectedFilesSentByServer = json.getInt("returnTiles");
-		session.setExpectedReturnFiles(expectedFilesSentByServer);
+		session.setExpectedReturnFiles();
 		JSONArray data = json.getJSONArray("coords");
 		int filesToSend = data.length();
 		for (int i = 0; i < data.length(); i++) {

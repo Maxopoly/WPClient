@@ -24,7 +24,6 @@ public class MapDataSyncSession extends MapDataFileHandler {
 
 	private String status;
 	private int sessionID;
-	private int expectedReturnFiles;
 	private int receivedReturnFiles;
 	private boolean active;
 	private Map<CoordPair, WPMappingTile> cachedTiles;
@@ -63,8 +62,7 @@ public class MapDataSyncSession extends MapDataFileHandler {
 		this.status = status;
 	}
 
-	public synchronized void setExpectedReturnFiles(int expected) {
-		this.expectedReturnFiles = expected;
+	public synchronized void setExpectedReturnFiles() {
 		this.receivedReturnFiles = 0;
 	}
 
@@ -80,8 +78,7 @@ public class MapDataSyncSession extends MapDataFileHandler {
 
 	public synchronized void incrementReturnFileCounter() {
 		this.receivedReturnFiles++;
-		status = String.format("Receiving merged map data from server  (%d / %d) downloaded", receivedReturnFiles,
-				expectedReturnFiles);
+		status = String.format("Receiving merged map data from server  (%d) downloaded", receivedReturnFiles);
 	}
 
 	public void finish() {
@@ -95,7 +92,8 @@ public class MapDataSyncSession extends MapDataFileHandler {
 		status = "Started collecting local map data";
 		File folder = getDayDataFolder();
 		File[] pics = folder.listFiles();
-		status = String.format("Detected a total of %d possible local map data files", pics.length);
+		status = String.format("Detected a total of %d possible local map data files, calculating hashes...",
+				pics.length);
 		List<WPMappingTile> localTiles = new LinkedList<WPMappingTile>();
 		cachedTiles = loadCachedTileHashes();
 		for (int i = 0; i < pics.length; i++) {
@@ -128,8 +126,8 @@ public class MapDataSyncSession extends MapDataFileHandler {
 	public void handleReceivedTile(WPMappingTile tile) {
 		incrementReturnFileCounter();
 		saveTile(tile);
-		cachedTiles.put(tile.getCoords(), new WPMappingTile(tile.getTimeStamp(), tile.getCoords().getX(), tile.getCoords()
-				.getZ(), tile.getHash()));
+		cachedTiles.put(tile.getCoords(), new WPMappingTile(tile.getTimeStamp(), tile.getCoords().getX(), tile
+				.getCoords().getZ(), tile.getHash()));
 	}
 
 	@Override
@@ -169,6 +167,14 @@ public class MapDataSyncSession extends MapDataFileHandler {
 
 		} catch (IOException e) {
 			FMLLog.getLogger().error("Failed to place files", e);
+		}
+		// JM has some bugs and we need to delete this file on startup to circumvent them
+		File wayPointGroupFile = new File(new MapDataSyncSession(0).getMapDataFolder(), "waypoints");
+		if (wayPointGroupFile.exists() && wayPointGroupFile.isDirectory()) {
+			File groupJson = new File(wayPointGroupFile, "waypoint_groups.json");
+			if (groupJson.exists()) {
+				groupJson.delete();
+			}
 		}
 	}
 

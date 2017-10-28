@@ -35,6 +35,7 @@ public class MiscListener {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onConnect(ClientConnectedToServerEvent e) {
 		String ip = Minecraft.getMinecraft().getCurrentServerData().serverIP;
+		ip = ip.split(":")[0]; // remove port
 		FMLLog.getLogger().info("[WPC]Connecting to  " + ip);
 		boolean enabled;
 		if (ip.endsWith(serverIp)) {

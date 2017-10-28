@@ -14,7 +14,6 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import journeymap.client.api.IClientAPI;
 import journeymap.client.api.display.ModWaypoint;
 import journeymap.client.api.model.MapImage;
 import net.minecraft.client.Minecraft;
@@ -39,17 +38,16 @@ public class ItemLocationWayPointHandler {
 		return instance;
 	}
 
-	private IClientAPI jmAPI;
 	private Logger logger;
 	private Minecraft mc;
 
-	ItemLocationWayPointHandler(IClientAPI jmAPI, Logger logger, Minecraft mc) {
-		this.jmAPI = jmAPI;
+	ItemLocationWayPointHandler(Logger logger, Minecraft mc) {
 		this.logger = logger;
 		this.mc = mc;
 		this.points = new HashSet<ModWaypoint>();
 		instance = this;
-		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16).setAnchorY(16);
+		this.icon = new MapImage(new ResourceLocation("wpclient:images/head.png"), 32, 32).setAnchorX(16)
+				.setAnchorY(16);
 	}
 
 	public synchronized void markLocations(WPItem item, List<Chest> chests) {
@@ -97,9 +95,9 @@ public class ItemLocationWayPointHandler {
 				mc.thePlayer.addChatMessage(msgNoItems);
 			} else {
 				mc.thePlayer.addChatMessage(new TextComponentString(String.format(
-						"%s[WPC]  %sFound %s%s %sof %s%s %sin %d location%s.", TextFormatting.WHITE, TextFormatting.GRAY,
-						TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum), TextFormatting.GRAY,
-						TextFormatting.WHITE, prettyName, TextFormatting.GRAY, chests.size(), s)));
+						"%s[WPC]  %sFound %s%s %sof %s%s %sin %d location%s.", TextFormatting.WHITE,
+						TextFormatting.GRAY, TextFormatting.WHITE, ItemUtils.prettifyItemCount(item.getID(), sum),
+						TextFormatting.GRAY, TextFormatting.WHITE, prettyName, TextFormatting.GRAY, chests.size(), s)));
 			}
 		}
 	}
@@ -176,17 +174,12 @@ public class ItemLocationWayPointHandler {
 		}
 		boolean showTotalPercentage = WPClientForgeMod.getInstance().getConfig().showItemWaypointPercentage();
 		ModWaypoint point = new ModWaypoint(WPClientForgeMod.MODID, loc.toString() + ";;WPC", "items",
-				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount, totalCount, showTotalPercentage) + " " + name,
-				new BlockPos(loc.getX(), loc.getY(), loc.getZ()), icon, color, false, 0);
+				ItemUtils.prettifyItemCountWaypointName(item.getID(), itemCount, totalCount, showTotalPercentage) + " "
+						+ name, new BlockPos(loc.getX(), loc.getY(), loc.getZ()), icon, color, false, 0);
 		point.setPersistent(false);
 		point.setColor(color);
 		point.setEditable(false);
 		points.add(point);
-		try {
-			jmAPI.show(point);
-		} catch (Exception e) {
-			logger.warn("Failed to show waypoint", e);
-		}
-
+		JourneyMapPlugin.queueWayPointToShow(point);
 	}
 }

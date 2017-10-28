@@ -3,6 +3,7 @@ package com.github.maxopoly.WPClient.listener;
 import com.github.maxopoly.WPClient.WPClientForgeMod;
 import com.github.maxopoly.WPClient.util.CustomGUIChest;
 import com.github.maxopoly.WPCommon.model.Location;
+import com.github.maxopoly.WPCommon.model.permission.Permission;
 import java.lang.reflect.Field;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -35,6 +36,10 @@ public class ChestContentListener {
 			return;
 		}
 		if (!(e.getGui() instanceof GuiChest)) {
+			return;
+		}
+		if (WPClientForgeMod.getInstance().getPermissionLevel() == null
+				|| !WPClientForgeMod.getInstance().getPermissionLevel().hasPermission(Permission.CHEST_POST)) {
 			return;
 		}
 		GuiChest ogChest = (GuiChest) e.getGui();
