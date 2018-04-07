@@ -132,8 +132,8 @@ public class PlayerLocationWaypointHandler {
 			}
 			int color = getStandingColor(standing);
 			LoggedPlayerLocation updatedLoc = tracker.getLastKnownLocation(playerName);
+			// When the player exits radar range.
 			if (updatedLoc == null) {
-				logger.warn("Location of " + playerName + " was null and could not be updated?");
 				continue;
 			}
 			long lastSeen = updatedLoc.getTimeStamp();
